@@ -53,10 +53,10 @@ Mavo.Functions.sort = function(array, ...properties) {
 			}
 
 			if ((prev < next && order === "+") ||
-					(prev > next && order === "-")) {
+			    (prev > next && order === "-")) {
 				return -1;
 			} else if ((prev > next && order === "+") ||
-					(prev < next && order === "-")) {
+			    (prev < next && order === "-")) {
 				return 1;
 			}
 			// If neither checks work, we have a tie, attempt again with
