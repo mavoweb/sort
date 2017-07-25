@@ -1,24 +1,22 @@
-(function() {
+(function($, $$) {
 
 Mavo.Plugins.register("sort", {});
 
 Mavo.Functions.sort = function(array, ...properties) {
 	var arrayCopy = array.slice();
-	var splitChar = ".";
 
 	if (array.length === 0) {
 		return arrayCopy;
 	}
 
 	arrayCopy.sort(function(prev, next) {
-		// If it's an array of differnt types, we can't sort properly
-		if (typeof(prev) !== typeof(next)) {
+		// If it's an array of different types, we can't sort properly
+		if (typeof prev !== typeof next) {
 			return 0;
 		}
 
 		// If there's no properties, attempt to sort primitives in increasing
 		// order by default
-		var order = "+";
 		if (properties.length === 0) {
 			if (prev < next) {
 				return -1;
@@ -31,32 +29,35 @@ Mavo.Functions.sort = function(array, ...properties) {
 
 		// Sort objects by first property that doesn't result in a tie
 		for (var propertyString of properties) {
-			var order = propertyString[0] || "+";
+			propertyString = propertyString.trim();
+			if (propertyString.length === 0) {
+				continue;
+			}
+			var inc = true;
+			var incList = ["+"];
+			var decList = ["-"];
 
-			// TODO: what to do if order is not + or -
-			order = order === "+" || order === "-" ? order : "+";
-			var propertyString = propertyString.substring(1);
-			
-			// TODO: what to do if propertyString is empty string
-			var nestedList = []
-			if (propertyString.length > 0) {
-				var nestedList = propertyString.split(splitChar);
+			if (incList.indexOf(propertyString[0]) > -1) {
+				propertyString = propertyString.substring(1);
+			} else if (decList.indexOf(propertyString[0]) > -1) {
+				inc = false;
+				propertyString = propertyString.substring(1);
 			}
 
-			for (property of nestedList) {
-				if (property in prev && property in next) {
-					prev = prev[property];
-					next = next[property];
-				} else {
-					// TODO: alert failure? return 0? Continue sort anyway?
-				}
+			if (propertyString.length === 0) {
+				continue;
 			}
 
-			if ((prev < next && order === "+") ||
-			    (prev > next && order === "-")) {
+			var nestedList = propertyString.split(".");
+
+			prev = $.value(prev, ...nestedList);
+			next = $.value(next, ...nestedList);
+
+			if ((prev < next && inc)||
+			    (prev > next && !inc)) {
 				return -1;
-			} else if ((prev > next && order === "+") ||
-			           (prev < next && order === "-")) {
+			} else if ((prev > next && inc) ||
+			           (prev < next && !inc)) {
 				return 1;
 			}
 			// If neither checks work, we have a tie, attempt again with
@@ -70,4 +71,4 @@ Mavo.Functions.sort = function(array, ...properties) {
 	return arrayCopy;
 }
 
-})();
+})(Bliss, Bliss.$);
