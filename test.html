@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Sort tests</title>
+  <link rel="stylesheet" href="https://test.mavo.io/style.css" />
+  <link rel="stylesheet" href="https://get.mavo.io/mavo.css" />
+  <script src="https://get.mavo.io/mavo.js"></script>
+</head>
+<body>
+
+<h1>Sort tests</h1>
+
+<section>
+	<h1>String and number sorts, expected use cases</h1>
+	<table class="reftest" data-test="expressionEvaluation" data-columns="3">
+
+		<!--Sort on empty array-->
+		<tr>
+			<td>sort([])</td>
+			<td>[]</td>
+		</tr>
+
+		<!--Sort on numbers-->
+		<tr>
+			<td>sort([9, 4, 3, 5, 1, 2, 6, 0, 8, 7])</td>
+			<td>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</td>
+		</tr>
+
+		<!--Sort on numbers with negative values-->
+		<tr>
+			<td>sort([-10, 5, 3, -3, 10,  -2, 1, -7, 9, 7])</td>
+			<td>[-10, -7, -3, -2, 1, 3, 5, 7, 9, 10]</td>
+		</tr>
+
+		<!--Sort on simple strings-->
+		<tr>
+			<td>sort(['g', 'r', 'w', 'i', 's', 'a', 'h', 'o'])</td>
+			<td>['a', 'g', 'h', 'i', 'o', 'r', 's', 'w']</td>
+		</tr>
+		
+		<!--Sort on strings-->
+		<tr>
+			<td>sort(['zaa', 'bcde', 'abc', 'bcda', 'bcd', 'aeb', 'abe', 'abcd'])</td>
+			<td>['abc', 'abcd', 'abe', 'aeb', 'bcd', 'bcda', 'bcde', 'zaa']</td>
+		</tr>
+
+		<!--Sort on numbers with negative values, specifying +-->
+		<tr>
+			<td>sort([-10, 5, 3, -3, 10,  -2, 1, -7, 9, 7], '+')</td>
+			<td>[-10, -7, -3, -2, 1, 3, 5, 7, 9, 10]</td>
+		</tr>
+
+		<!--Sort on strings, specifying +-->
+		<tr>
+			<td>sort(['zaa', 'bcde', 'abc', 'bcda', 'bcd', 'aeb', 'abe', 'abcd'], '+')</td>
+			<td>['abc', 'abcd', 'abe', 'aeb', 'bcd', 'bcda', 'bcde', 'zaa']</td>
+		</tr>
+
+		<!--Reverse sort on numbers-->
+		<tr>
+			<td>sort([-3, 2, -4, 1, 0, -2, -5, 5, 4, 3, -1], '-')</td>
+			<td>[5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]</td>
+		</tr>
+
+		<!--Reverse sort on strings-->
+		<tr>
+			<td>sort(['mnoz', 'zabc', 'za', 'b', 'z', 'zabcd', 'zab', 'a', 'mnoa', 'c', 'mnom'], '-')</td>
+			<td>['zabcd', 'zabc', 'zab', 'za', 'z', 'mnoz', 'mnom', 'mnoa', 'c', 'b', 'a']</td>
+		</tr>
+		
+	</table>
+</section>
+
+<section>
+
+	<h1>String and number sorts, unexpected use cases</h1>
+	<table class="reftest" data-test="expressionEvaluation" data-columns="3">
+		<!--Sort with invalid order param-->
+		<!--TODO: go with default sort? Have sort fail?-->
+		<tr>
+			<td>sort(['zaa', 'bcde', 'abc', 'bcda', 'bcd', 'aeb', 'abe', 'abcd'], 'blah')</td>
+			<td>['abc', 'abcd', 'abe', 'aeb', 'bcd', 'bcda', 'bcde', 'zaa']</td>
+		</tr>
+
+		<!--Sort with invalid order param, but valid order param later-->
+		<!--TODO: go with first param that makes sense?-->
+		<tr>
+			<td>sort(['zaa', 'bcde', 'abc', 'bcda', 'bcd', 'aeb', 'abe', 'abcd'], 'blah', '-')</td>
+			<td>['zaa', 'bcde', 'bcda', 'bcd', 'aeb', 'abe', 'abcd', 'abc']</td>
+		</tr>
+		<!--TODO: same thing? even though + is in blah?-->
+		<tr>
+			<td>sort(['zaa', 'bcde', 'abc', 'bcda', 'bcd', 'aeb', 'abe', 'abcd'], '+blah', '-')</td>
+			<td>['zaa', 'bcde', 'bcda', 'bcd', 'aeb', 'abe', 'abcd', 'abc']</td>
+		</tr>
+		
+		<!--Sort with invalid order param where property doesn't exist, but looks like they want decrease-->
+		<!-- TODO: go with decrease? Stick with default sort (increase)? Have sort fail? -->
+		<tr>
+			<td>sort(['zaa', 'bcde', 'abc', 'bcda', 'bcd', 'aeb', 'abe', 'abcd'], '-blah')</td>
+			<td>['zaa', 'bcde', 'bcda', 'bcd', 'aeb', 'abe', 'abcd', 'abc']</td>
+		</tr>
+
+		<!--Sort on numbers with int order param-->
+		<!--TODO: Use sign of number as sort criteria?-->
+		<tr>
+			<td>sort([-3, 2, -4, 1, 0, -2, -5, 5, 4, 3, -1], -1)</td>
+			<td>[5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]</td>
+		</tr>
+		<tr>
+			<td>sort([-3, 2, -4, 1, 0, -2, -5, 5, 4, 3, -1], 0)</td>
+			<td>[-5,- 4, -3, -2, -1, 0, 1, 2, 3, 4, 5]</td>
+		</tr>
+		<tr>
+			<td>sort([-3, 2, -4, 1, 0, -2, -5, 5, 4, 3, -1], 1)</td>
+			<td>[-5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5]</td>
+		</tr>
+	</table>
+</section>
+
+<section>
+	<h1>Object sort, expected use cases</h1>
+
+</section>
+
+<section>
+	<h1>Object sort, unexpected use cases</h1>
+
+</section>
+
+<section>
+	<h1>Other datatype sort</h1>
+	<!--Remember to include Boolean, Array-->
+</section>
+
+<script src="mavo-sort.js"></script>
+
+<script src="https://test.mavo.io/test.js"></script>
+<script>
+function expressionEvaluation(test, result, expected) {
+  try {
+    var r = (new Mavo.Expression(test.textContent)).eval({});
+    result.textContent = r;
+    return Test.equals(r, eval(expected.textContent));
+  }
+  catch(e) {
+    console.error(e);
+    result.textContent = "ERROR";
+    return false;
+  }
+}
+</script>
+</body>
+</html>
+

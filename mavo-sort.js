@@ -28,44 +28,68 @@ Mavo.Functions.sort = function(array, ...properties) {
 		}
 
 		// Sort objects by first property that doesn't result in a tie
-		for (var propertyString of properties) {
-			propertyString = propertyString.trim();
-			if (propertyString.length === 0) {
+		var isTie = false
+		for (var property of properties) {
+			isTie = false;
+			if (typeof property === 'number') {
+				var inc = property >= 0;
+			}
+			if (typeof property != "string") {
+				continue
+			}
+			property = property.trim();
+			if (property.length === 0) {
 				continue;
 			}
 			var inc = true;
 			var incList = ["+"];
 			var decList = ["-"];
 
-			if (incList.indexOf(propertyString[0]) > -1) {
-				propertyString = propertyString.substring(1);
-			} else if (decList.indexOf(propertyString[0]) > -1) {
+			if (incList.indexOf(property[0]) > -1) {
+				property = property.substring(1);
+			} else if (decList.indexOf(property[0]) > -1) {
 				inc = false;
-				propertyString = propertyString.substring(1);
+				property = property.substring(1);
 			}
 
-			if (propertyString.length === 0) {
-				continue;
+			var new_prev = prev, new_next = next;
+			if (typeof prev == 'object') {
+				var nestedList = property.split(".");
+
+				new_prev = $.value(prev, ...nestedList);
+				new_next = $.value(next, ...nestedList);
+
+				if (new_prev === undefined || new_next === undefined) {
+					continue;
+				}
 			}
 
-			var nestedList = propertyString.split(".");
-
-			prev = $.value(prev, ...nestedList);
-			next = $.value(next, ...nestedList);
-
-			if ((prev < next && inc)||
-			    (prev > next && !inc)) {
+			if ((new_prev < new_next && inc)||
+			    (new_prev > new_next && !inc)) {
 				return -1;
-			} else if ((prev > next && inc) ||
-			           (prev < next && !inc)) {
+			} else if ((new_prev > new_next && inc) ||
+			           (new_prev < new_next && !inc)) {
 				return 1;
+			} else {
+				isTie = true;
 			}
 			// If neither checks work, we have a tie, attempt again with
 			// next property
 		}
 
-		// If they all result in a tie, return a tie
-		return 0;
+		// If we ended on a tie rather than a skip, return 0
+		if (isTie) {
+			return 0;
+		}
+
+		// Otherwise try and sort the values as-is
+		if (prev < next) {
+			return -1;
+		} else if (prev > next) {
+			return 1;
+		} else {
+			return 0;
+		}
 	});
 
 	return arrayCopy;
