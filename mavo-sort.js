@@ -1,6 +1,18 @@
 (function($, $$) {
 
-Mavo.Plugins.register("sort", {});
+Mavo.attributes.push("mv-sort");
+
+Mavo.Plugins.register("sort", {
+	hooks: {
+		'node-getdata-end': function(env) {
+			var templateElement = env.context.templateElement;
+			var sortProperties = (templateElement.getAttribute("mv-sort") || "").split(/\s+/);
+			if (sortProperties.length) {
+				env.data = Mavo.functions.sort(env.data, sortProperties);
+			}
+		}
+	}
+});
 
 Mavo.Functions.sort = function(array, ...properties) {
 	var arrayCopy = array.slice();
