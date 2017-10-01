@@ -5,7 +5,7 @@
   <title>Sort tests</title>
   <link rel="stylesheet" href="https://test.mavo.io/style.css" />
   <link rel="stylesheet" href="https://get.mavo.io/mavo.css" />
-  <script src="https://get.mavo.io/mavo.js"></script>
+  <script src="https://dev.mavo.io/dist/mavo.js"></script>
 </head>
 <body>
 
@@ -58,7 +58,7 @@
 		</tr>
 
 		<!--Reverse sort on numbers-->
-		<tr title="Numbers, - order specified">
+		<tr title="Mixed sign numbers, - order specified">
 			<td>sort([-3, 2, -4, 1, 0, -2, -5, 5, 4, 3, -1], '-')</td>
 			<td>[5, 4, 3, 2, 1, 0, -1, -2, -3, -4, -5]</td>
 		</tr>
@@ -92,7 +92,7 @@
 		<!-- TODO: go with decrease? Stick with default sort (increase)? Have sort fail? -->
 		<tr title="Invalid order param with order specified">
 			<td>sort(['zaa', 'bcde', 'abc', 'bcda', 'bcd', 'aeb', 'abe', 'abcd'], '-blah')</td>
-			<td>['zaa', 'bcde', 'bcda', 'bcd', 'aeb', 'abe', 'abcd', 'abc']</td>
+			<td>['abc', 'abcd', 'abe', 'aeb', 'bcd', 'bcda', 'bcde', 'zaa']</td>
 		</tr>
 		<!--TODO: same thing? even though + is in blah?-->
 		<tr title="Invalid order param with order specified, valid order param later">
@@ -446,7 +446,7 @@
 				},
 			]</td>
 		</tr>
-		
+
 		<tr title="Property that doesn't exist given, followed by property that does exist">
 			<td>sort([
 				{
@@ -528,6 +528,443 @@
 		<tr>
 			<td>sort([false, false, true, false], "-")</td>
 			<td>[true, false, false, false]</td>
+	</table>
+</section>
+
+<h1>mv-sort tests</h1>
+
+<script type="application/json" id="collections">
+	{
+		"simpleCollection": [2, -2, 1, 0, -1],
+		"simpleCollection2": [2, -2, 1, 0, -1],
+		"simpleCollection3": [2, -2, 1, 0, -1],
+	}
+</script>
+
+<section>
+	<h1>Collection sort</h1>
+	<table class="reftest">
+		<tr>
+			<td>
+				<pre id="collections1"><!--
+					-->{<!--
+						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
+					-->}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Primitives">
+			<td mv-app mv-storage="#collections1">
+				<ul>
+					<li property="simpleCollection" mv-multiple mv-sort></li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-sort="+">-2</li>
+					<li mv-sort="+">-1</li>
+					<li mv-sort="+">0</li>
+					<li mv-sort="+">1</li>
+					<li mv-sort="+">2</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collections2"><!--
+					-->{<!--
+						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
+					-->}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr>
+			<td mv-app mv-storage="#collections2">
+				<ul>
+					<li property="simpleCollection" mv-multiple mv-sort="+"></li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-sort="+">-2</li>
+					<li mv-sort="+">-1</li>
+					<li mv-sort="+">0</li>
+					<li mv-sort="+">1</li>
+					<li mv-sort="+">2</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collections3"><!--
+					-->{<!--
+						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
+					-->}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr>
+			<td mv-app mv-storage="#collections3">
+				<ul>
+					<li property="simpleCollection" mv-multiple mv-sort="-"></li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-sort="-">2</li>
+					<li mv-sort="-">1</li>
+					<li mv-sort="-">0</li>
+					<li mv-sort="-">-1</li>
+					<li mv-sort="-">-2</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collections4">
+{
+	"simpleGroup": [
+		{"prop1": "b", "prop2": 2},
+		{"prop1": "a", "prop2": 2},
+		{"prop1": "c", "prop2": 1},
+		{"prop1": "d", "prop2": 1}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Simple group">
+			<td mv-app mv-storage="#collections4">
+				<ul>
+					<li property="simpleGroup" mv-multiple mv-sort="prop2 -prop1">
+						<span style="color: blue" property="prop1"></span>
+						<span style="color: lightblue" property="prop2"></span>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">d</span>
+						<span style="color: lightblue">1</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">c</span>
+						<span style="color: lightblue">1</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">b</span>
+						<span style="color: lightblue">2</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">a</span>
+						<span style="color: lightblue">2</span>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collections5">
+{
+	"simpleGroup": [
+		{
+			"prop1": "b",
+			"prop2": 2
+		},
+		{
+			"prop1": "a",
+			"prop2": 2
+		},
+		{
+			"prop1": "c",
+			"prop2": 1
+		},
+		{
+			"prop1": "d",
+			"prop2": 1
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Updating simple group (Type: 'prop2 -prop1' in the input box, and click
+		Save)" class="interactive">
+			<td mv-app mv-storage="#collections5">
+				<div>
+					<input mv-storage="none" property="props">
+				</div>
+				<ul>
+					<li property="simpleGroup" mv-multiple mv-sort="[props]">
+						<span style="color: blue" property="prop1"></span>
+						<span style="color: lightblue" property="prop2"></span>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<div>
+					<input mv-storage="none" value="prop2 -prop1">
+				</div>
+				<ul>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">d</span>
+						<span style="color: lightblue">1</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">c</span>
+						<span style="color: lightblue">1</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">b</span>
+						<span style="color: lightblue">2</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">a</span>
+						<span style="color: lightblue">2</span>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collections6">
+{
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 1
+				},
+				"prop22": -1
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -2
+				},
+				"prop22": 2
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 2
+				},
+				"prop22": -2
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 0
+				},
+				"prop22": 0
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -1
+				},
+				"prop22": 1
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Deep Group">
+			<td mv-app mv-storage="#collections6">
+				<ul>
+					<li property="deepGroup" mv-multiple mv-sort="prop11.prop12.prop13">
+						<div property="prop11">
+							<div property="prop12">
+								<div property="prop13"></div>
+							</div>
+							<div property="prop22"></div>
+						</div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-sort="prop11.prop12.prop13">
+						<div>
+							<div>
+								<span>-2</span>
+							</div>
+							<div>2</div>
+						</div>
+					</li>
+					<li mv-sort="prop11.prop12.prop13">
+						<div>
+							<div>
+								<span>-1</span>
+							</div>
+							<div>1</div>
+						</div>
+					</li>
+					<li mv-sort="prop11.prop12.prop13">
+						<div>
+							<div>
+								<span>0</span>
+							</div>
+							<div>0</div>
+						</div>
+					</li>
+					<li mv-sort="prop11.prop12.prop13">
+						<div>
+							<div>
+								<span>1</span>
+							</div>
+							<div>-1</div>
+						</div>
+					</li>
+					<li mv-sort="prop11.prop12.prop13">
+						<div>
+							<div>
+								<span>2</span>
+							</div>
+							<div>-2</div>
+						</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collections7">
+{
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 1
+				},
+				"prop22": -1
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -2
+				},
+				"prop22": 2
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 2
+				},
+				"prop22": -2
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 0
+				},
+				"prop22": 0
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -1
+				},
+				"prop22": 1
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Deep Group with update (Type '-prop11.prop12.prop13' and click
+		Save)" class="interactive">
+			<td mv-app mv-storage="#collections7">
+				<input mv-storage="none" property="props">
+				<ul>
+					<li property="deepGroup" mv-multiple mv-sort="[props]">
+						<div property="prop11">
+							<div property="prop12">
+								<div property="prop13"></div>
+							</div>
+							<div property="prop22"></div>
+						</div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-sort="prop11.prop12.prop13">
+						<div>
+							<div>
+								<span>2</span>
+							</div>
+							<div>-2</div>
+						</div>
+					</li>
+					<li mv-sort="prop11.prop12.prop13">
+						<div>
+							<div>
+								<span>1</span>
+							</div>
+							<div>-1</div>
+						</div>
+					</li>
+					<li mv-sort="prop11.prop12.prop13">
+						<div>
+							<div>
+								<span>0</span>
+							</div>
+							<div>0</div>
+						</div>
+					</li>
+					<li mv-sort="prop11.prop12.prop13">
+						<div>
+							<div>
+								<span>-1</span>
+							</div>
+							<div>1</div>
+						</div>
+					</li>
+					<li mv-sort="prop11.prop12.prop13">
+						<div>
+							<div>
+								<span>-2</span>
+							</div>
+							<div>2</div>
+						</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
 	</table>
 </section>
 
