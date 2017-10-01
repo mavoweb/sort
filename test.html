@@ -533,20 +533,40 @@
 
 <h1>mv-sort tests</h1>
 
-<script type="application/json" id="collections">
-	{
-		"simpleCollection": [2, -2, 1, 0, -1],
-		"simpleCollection2": [2, -2, 1, 0, -1],
-		"simpleCollection3": [2, -2, 1, 0, -1],
-	}
-</script>
-
 <section>
 	<h1>Collection sort</h1>
 	<table class="reftest">
 		<tr>
 			<td>
-				<pre id="collections1"><!--
+				<pre id="collection0"><!--
+					-->{<!--
+						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
+					-->}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Empty mv-sort">
+			<td mv-app mv-storage="#collection0">
+				<ul>
+					<li property="simpleCollection" mv-multiple mv-sort></li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-sort="+">2</li>
+					<li mv-sort="+">-2</li>
+					<li mv-sort="+">1</li>
+					<li mv-sort="+">0</li>
+					<li mv-sort="+">-1</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection1"><!--
 					-->{<!--
 						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
 					-->}
@@ -557,35 +577,7 @@
 			</td>
 		</tr>
 		<tr title="Primitives">
-			<td mv-app mv-storage="#collections1">
-				<ul>
-					<li property="simpleCollection" mv-multiple mv-sort></li>
-				</ul>
-			</td>
-			<td>
-				<ul>
-					<li mv-sort="+">-2</li>
-					<li mv-sort="+">-1</li>
-					<li mv-sort="+">0</li>
-					<li mv-sort="+">1</li>
-					<li mv-sort="+">2</li>
-				</ul>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<pre id="collections2"><!--
-					-->{<!--
-						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
-					-->}
-				</pre>
-			</td>
-			<td>
-				<script>document.write($$("td pre").pop().outerHTML)</script>
-			</td>
-		</tr>
-		<tr>
-			<td mv-app mv-storage="#collections2">
+			<td mv-app mv-storage="#collection1">
 				<ul>
 					<li property="simpleCollection" mv-multiple mv-sort="+"></li>
 				</ul>
@@ -602,7 +594,7 @@
 		</tr>
 		<tr>
 			<td>
-				<pre id="collections3"><!--
+				<pre id="collection2"><!--
 					-->{<!--
 						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
 					-->}
@@ -613,7 +605,35 @@
 			</td>
 		</tr>
 		<tr>
-			<td mv-app mv-storage="#collections3">
+			<td mv-app mv-storage="#collection2">
+				<ul>
+					<li property="simpleCollection" mv-multiple mv-sort="+"></li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-sort="+">-2</li>
+					<li mv-sort="+">-1</li>
+					<li mv-sort="+">0</li>
+					<li mv-sort="+">1</li>
+					<li mv-sort="+">2</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection3"><!--
+					-->{<!--
+						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
+					-->}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr>
+			<td mv-app mv-storage="#collection3">
 				<ul>
 					<li property="simpleCollection" mv-multiple mv-sort="-"></li>
 				</ul>
@@ -630,7 +650,7 @@
 		</tr>
 		<tr>
 			<td>
-				<pre id="collections4">
+				<pre id="collection4">
 {
 	"simpleGroup": [
 		{"prop1": "b", "prop2": 2},
@@ -646,7 +666,7 @@
 			</td>
 		</tr>
 		<tr title="Simple group">
-			<td mv-app mv-storage="#collections4">
+			<td mv-app mv-storage="#collection4">
 				<ul>
 					<li property="simpleGroup" mv-multiple mv-sort="prop2 -prop1">
 						<span style="color: blue" property="prop1"></span>
@@ -677,7 +697,7 @@
 		</tr>
 		<tr>
 			<td>
-				<pre id="collections5">
+				<pre id="collection5">
 {
 	"simpleGroup": [
 		{
@@ -706,7 +726,7 @@
 		</tr>
 		<tr title="Updating simple group (Type: 'prop2 -prop1' in the input box, and click
 		Save)" class="interactive">
-			<td mv-app mv-storage="#collections5">
+			<td mv-app mv-storage="#collection5">
 				<div>
 					<input mv-storage="none" property="props">
 				</div>
@@ -743,7 +763,7 @@
 		</tr>
 		<tr>
 			<td>
-				<pre id="collections6">
+				<pre id="collection6">
 {
 	"deepGroup": [
 		{
@@ -795,7 +815,7 @@
 			</td>
 		</tr>
 		<tr title="Deep Group">
-			<td mv-app mv-storage="#collections6">
+			<td mv-app mv-storage="#collection6">
 				<ul>
 					<li property="deepGroup" mv-multiple mv-sort="prop11.prop12.prop13">
 						<div property="prop11">
@@ -854,7 +874,7 @@
 		</tr>
 		<tr>
 			<td>
-				<pre id="collections7">
+				<pre id="collection7">
 {
 	"deepGroup": [
 		{
@@ -907,7 +927,7 @@
 		</tr>
 		<tr title="Deep Group with update (Type '-prop11.prop12.prop13' and click
 		Save)" class="interactive">
-			<td mv-app mv-storage="#collections7">
+			<td mv-app mv-storage="#collection7">
 				<input mv-storage="none" property="props">
 				<ul>
 					<li property="deepGroup" mv-multiple mv-sort="[props]">
@@ -922,7 +942,8 @@
 			</td>
 			<td>
 				<ul>
-					<li mv-sort="prop11.prop12.prop13">
+					<input value="-prop11.prop12.prop13">
+					<li mv-sort="-prop11.prop12.prop13">
 						<div>
 							<div>
 								<span>2</span>
@@ -930,7 +951,7 @@
 							<div>-2</div>
 						</div>
 					</li>
-					<li mv-sort="prop11.prop12.prop13">
+					<li mv-sort="-prop11.prop12.prop13">
 						<div>
 							<div>
 								<span>1</span>
@@ -938,7 +959,7 @@
 							<div>-1</div>
 						</div>
 					</li>
-					<li mv-sort="prop11.prop12.prop13">
+					<li mv-sort="-prop11.prop12.prop13">
 						<div>
 							<div>
 								<span>0</span>
@@ -946,7 +967,7 @@
 							<div>0</div>
 						</div>
 					</li>
-					<li mv-sort="prop11.prop12.prop13">
+					<li mv-sort="-prop11.prop12.prop13">
 						<div>
 							<div>
 								<span>-1</span>
@@ -954,13 +975,196 @@
 							<div>1</div>
 						</div>
 					</li>
-					<li mv-sort="prop11.prop12.prop13">
+					<li mv-sort="-prop11.prop12.prop13">
 						<div>
 							<div>
 								<span>-2</span>
 							</div>
 							<div>2</div>
 						</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection8">
+{
+	"nestedGroup": [
+		{
+			"prop11": 1,
+			"prop12": [
+				4,
+				5,
+				2,
+				1,
+				3
+			]
+		},
+		{
+			"prop11": -1,
+			"prop12": [
+				-3,
+				-2,
+				-5,
+				-1,
+				-4
+			]
+		},
+		{
+			"prop11": 0,
+			"prop12": [
+				1,
+				0,
+				-2,
+				-1,
+				2
+			]
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Nested Groups">
+			<td mv-app mv-storage="#collection8">
+				<ul>
+					<li property="nestedGroup" mv-multiple mv-sort="prop11">
+						<div property="prop11"></div>
+						<ul>
+							<li property="prop12" mv-multiple mv-sort="-"></li>
+						</ul>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-sort="prop11">
+						<div>-1</div>
+						<ul>
+							<li mv-sort="-">-1</li>
+							<li mv-sort="-">-2</li>
+							<li mv-sort="-">-3</li>
+							<li mv-sort="-">-4</li>
+							<li mv-sort="-">-5</li>
+						</ul>
+					</li>
+					<li mv-sort="prop11">
+						<div>0</div>
+						<ul>
+							<li mv-sort="-">2</li>
+							<li mv-sort="-">1</li>
+							<li mv-sort="-">0</li>
+							<li mv-sort="-">-1</li>
+							<li mv-sort="-">-2</li>
+						</ul>
+					</li>
+					<li mv-sort="prop11">
+						<div>1</div>
+						<ul>
+							<li mv-sort="-">5</li>
+							<li mv-sort="-">4</li>
+							<li mv-sort="-">3</li>
+							<li mv-sort="-">2</li>
+							<li mv-sort="-">1</li>
+						</ul>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection9">
+{
+	"nestedGroup": [
+		{
+			"prop11": 1,
+			"prop12": [
+				4,
+				5,
+				2,
+				1,
+				3
+			]
+		},
+		{
+			"prop11": -1,
+			"prop12": [
+				-3,
+				-2,
+				-5,
+				-1,
+				-4
+			]
+		},
+		{
+			"prop11": 0,
+			"prop12": [
+				1,
+				0,
+				-2,
+				-1,
+				2
+			]
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Updating nested groups (Type 'prop11' in the fist input box, and
+		'-' in the second input box and click Save)" class="interactive">
+			<td mv-app mv-storage="#collection9">
+				<input mv-storage="none" property="props1">
+				<input mv-storage="none" property="props2">
+				<ul>
+					<li property="nestedGroup" mv-multiple mv-sort="[props1]">
+						<div property="prop11"></div>
+						<ul>
+							<li property="prop12" mv-multiple mv-sort="[props2]"></li>
+						</ul>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<input value="prop11">
+				<input value="-">
+				<ul>
+					<li mv-sort="prop11">
+						<div>-1</div>
+						<ul>
+							<li mv-sort="-">-1</li>
+							<li mv-sort="-">-2</li>
+							<li mv-sort="-">-3</li>
+							<li mv-sort="-">-4</li>
+							<li mv-sort="-">-5</li>
+						</ul>
+					</li>
+					<li mv-sort="prop11">
+						<div>0</div>
+						<ul>
+							<li mv-sort="-">2</li>
+							<li mv-sort="-">1</li>
+							<li mv-sort="-">0</li>
+							<li mv-sort="-">-1</li>
+							<li mv-sort="-">-2</li>
+						</ul>
+					</li>
+					<li mv-sort="prop11">
+						<div>1</div>
+						<ul>
+							<li mv-sort="-">5</li>
+							<li mv-sort="-">4</li>
+							<li mv-sort="-">3</li>
+							<li mv-sort="-">2</li>
+							<li mv-sort="-">1</li>
+						</ul>
 					</li>
 				</ul>
 			</td>

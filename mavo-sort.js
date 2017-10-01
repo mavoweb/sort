@@ -1,3 +1,5 @@
+/* global Bliss, Mavo */
+
 (function($, $$) {
 
 Mavo.attributes.push("mv-sort");
@@ -18,7 +20,6 @@ Mavo.Plugins.register("sort", {
 		'init-end': function(root) {
 			if (root.element) {
 				var observer = new Mavo.Observer(root.element, "mv-sort", records => {
-					debugger;
 					for (let record of records) {
 						var element = record.target;
 						var sortProperties = element.getAttribute("mv-sort");
@@ -162,12 +163,16 @@ Mavo.Functions.sort = function(array, ...properties) {
  */
 Mavo.Collection.sortDOM = function(collection, sortProperties) {
 	if (typeof sortProperties === "string") {
+		sortProperties = sortProperties.trim();
 		sortProperties = sortProperties.split(/\s+/).filter(val => val.length > 0);
 	}
-	var children = collection.children;
-	var sortedMavoNodes = Mavo.Functions.sort(children, ...sortProperties);
+
+	var mavoNodes = collection.children;
+	if (sortProperties.length > 0) {
+		mavoNodes = Mavo.Functions.sort(mavoNodes, ...sortProperties);
+	}
 	var fragment = document.createDocumentFragment();
-	for (child of sortedMavoNodes) {
+	for (let child of mavoNodes) {
 		fragment.appendChild(child.element);
 	}
 	if (collection.bottomUp) {
