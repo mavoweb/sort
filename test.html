@@ -11,6 +11,9 @@
 
 <h1>Sort tests</h1>
 
+<button id="checkAndSave" style="font-size: 200%">Check all checkboxes and save
+all Mavos</button>
+
 <section>
 	<h1>String and number sorts, expected use cases</h1>
 	<table class="reftest" data-test="expressionEvaluation" data-columns="3">
@@ -538,10 +541,16 @@
 	<table class="reftest">
 		<tr>
 			<td>
-				<pre id="collection0"><!--
-					-->{<!--
-						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
-					-->}
+				<pre id="collection0">
+{
+	"simpleCollection": [
+		2,
+		-2,
+		1,
+		0,
+		-1
+	]
+}
 				</pre>
 			</td>
 			<td>
@@ -566,10 +575,16 @@
 		</tr>
 		<tr>
 			<td>
-				<pre id="collection1"><!--
-					-->{<!--
-						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
-					-->}
+				<pre id="collection1">
+{
+	"simpleCollection": [
+		2,
+		-2,
+		1,
+		0,
+		-1
+	]
+}
 				</pre>
 			</td>
 			<td>
@@ -594,10 +609,16 @@
 		</tr>
 		<tr>
 			<td>
-				<pre id="collection2"><!--
-					-->{<!--
-						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
-					-->}
+				<pre id="collection2">
+{
+	"simpleCollection": [
+		2,
+		-2,
+		1,
+		0,
+		-1
+	]
+}
 				</pre>
 			</td>
 			<td>
@@ -622,10 +643,16 @@
 		</tr>
 		<tr>
 			<td>
-				<pre id="collection3"><!--
-					-->{<!--
-						-->"simpleCollection": [2, -2, 1, 0, -1]<!--
-					-->}
+				<pre id="collection3">
+{
+	"simpleCollection": [
+		2,
+		-2,
+		1,
+		0,
+		-1
+	]
+}
 				</pre>
 			</td>
 			<td>
@@ -653,10 +680,22 @@
 				<pre id="collection4">
 {
 	"simpleGroup": [
-		{"prop1": "b", "prop2": 2},
-		{"prop1": "a", "prop2": 2},
-		{"prop1": "c", "prop2": 1},
-		{"prop1": "d", "prop2": 1}
+		{
+			"prop1": "a",
+			"prop2": 2
+		},
+		{
+			"prop1": "b",
+			"prop2": 2
+		},
+		{
+			"prop1": "c",
+			"prop2": 1
+		},
+		{
+			"prop1": "d",
+			"prop2": 1
+		}
 	]
 }
 				</pre>
@@ -701,11 +740,11 @@
 {
 	"simpleGroup": [
 		{
-			"prop1": "b",
+			"prop1": "a",
 			"prop2": 2
 		},
 		{
-			"prop1": "a",
+			"prop1": "b",
 			"prop2": 2
 		},
 		{
@@ -724,14 +763,15 @@
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="Updating simple group (Type: 'prop2 -prop1' in the input box, and click
-		Save)" class="interactive">
+		<tr title="Updating simple group (check all boxes and click Save)" class="interactive">
 			<td mv-app mv-storage="#collection5">
 				<div>
-					<input mv-storage="none" property="props">
+					<input type="checkbox" mv-storage="none" property="check1">
+					<input type="checkbox" mv-storage="none" property="check2">
 				</div>
 				<ul>
-					<li property="simpleGroup" mv-multiple mv-sort="[props]">
+					<li property="simpleGroup" mv-multiple mv-sort="[if(check1, 'prop2')]
+						[if (check2, '-prop1')]">
 						<span style="color: blue" property="prop1"></span>
 						<span style="color: lightblue" property="prop2"></span>
 					</li>
@@ -739,7 +779,8 @@
 			</td>
 			<td>
 				<div>
-					<input mv-storage="none" value="prop2 -prop1">
+					<input type="checkbox">
+					<input type="checkbox">
 				</div>
 				<ul>
 					<li mv-sort="prop2 -prop1">
@@ -925,12 +966,14 @@
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="Deep Group with update (Type '-prop11.prop12.prop13' and click
-		Save)" class="interactive">
+		<tr title="Deep Group with update (check all boxes and click Save)" class="interactive">
 			<td mv-app mv-storage="#collection7">
-				<input mv-storage="none" property="props">
+				<div>
+					<input type="checkbox" mv-storage="none" property="check1">
+				</div>
 				<ul>
-					<li property="deepGroup" mv-multiple mv-sort="[props]">
+					<li property="deepGroup" mv-multiple mv-sort="[if(check1,
+						'-prop11.prop12.prop13')]">
 						<div property="prop11">
 							<div property="prop12">
 								<div property="prop13"></div>
@@ -942,7 +985,9 @@
 			</td>
 			<td>
 				<ul>
-					<input value="-prop11.prop12.prop13">
+					<div>
+						<input type="checkbox">
+					</div>
 					<li mv-sort="-prop11.prop12.prop13">
 						<div>
 							<div>
@@ -1118,23 +1163,26 @@
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="Updating nested groups (Type 'prop11' in the fist input box, and
-		'-' in the second input box and click Save)" class="interactive">
+		<tr title="Updating nested groups (check all boxes and click Save)" class="interactive">
 			<td mv-app mv-storage="#collection9">
-				<input mv-storage="none" property="props1">
-				<input mv-storage="none" property="props2">
+				<div>
+					<input type="checkbox" mv-storage="none" property="check1">
+					<input type="checkbox" mv-storage="none" property="check2">
+				</div>
 				<ul>
-					<li property="nestedGroup" mv-multiple mv-sort="[props1]">
+					<li property="nestedGroup" mv-multiple mv-sort="[if(check1, 'prop11')]">
 						<div property="prop11"></div>
 						<ul>
-							<li property="prop12" mv-multiple mv-sort="[props2]"></li>
+							<li property="prop12" mv-multiple mv-sort="[if(check2, '-')]"></li>
 						</ul>
 					</li>
 				</ul>
 			</td>
 			<td>
-				<input value="prop11">
-				<input value="-">
+				<div>
+					<input type="checkbox">
+					<input type="checkbox">
+				</div>
 				<ul>
 					<li mv-sort="prop11">
 						<div>-1</div>
@@ -1175,6 +1223,17 @@
 <script src="mavo-sort.js"></script>
 
 <script src="https://test.mavo.io/test.js"></script>
+<script>
+	document.getElementById("checkAndSave").addEventListener("click",
+			function(e) {
+				$$("input[type='checkbox']").forEach(function(box) {
+					box.click();
+				});
+				$$(".mv-bar .mv-save").forEach(function(save) {
+					save.click();
+				});
+			});
+</script>
 <script>
 function getObjectArrayString(a) {
 	s = '[\n';
