@@ -51,6 +51,18 @@ Mavo.Functions.sort = function(array, ...properties) {
 	}
 
 	arrayCopy.sort(function(prev, next) {
+		if (prev === undefined) {
+			return 1;
+		}
+		if (next === undefined) {
+			return -1;
+		}
+		if (prev === null) {
+			return 1;
+		}
+		if (next === null) {
+			return -1;
+		}
 
 		// If the elements in the array are Mavo nodes, sort by their data
 		if (prev instanceof Mavo.Node) {

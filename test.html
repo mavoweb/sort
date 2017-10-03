@@ -531,6 +531,31 @@ all Mavos</button>
 		<tr>
 			<td>sort([false, false, true, false], "-")</td>
 			<td>[true, false, false, false]</td>
+		</tr>
+		<tr title="Nulls mixed in ">
+			<td>sort([4, null, 2, 0, -2, null, 1, null])</td>
+			<td>[-2, 0, 1, 2, 4, null, null, null]</td>
+		</tr>
+		<tr>
+			<td>sort([4, null, 2, 0, -2, null, 1, null], "-")</td>
+			<td>[4, 2, 1, 0, -2, null, null, null]</td>
+		</tr>
+		<tr>
+			<td>sort(["a", null, null, "m", null, "n", null, "o", "z"])</td>
+			<td>["a", "m", "n", "o", "z", null, null, null, null]</td>
+		</tr>
+		<tr>
+			<td>sort(["a", null, null, "m", null, "n", null, "o", "z"], "-")</td>
+			<td>["z", "o", "n", "m", "a", null, null, null, null]</td>
+		</tr>
+		<tr>
+			<td>sort([false, true, null, null, true, false])</td>
+			<td>[false, false, true, true, null, null]</td>
+		</tr>
+		<tr>
+			<td>sort([false, true, null, null, true, false], "-")</td>
+			<td>[true, true, false, false, null, null]</td>
+		</tr>
 	</table>
 </section>
 
