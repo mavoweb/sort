@@ -51,7 +51,11 @@ Mavo.Functions.sort = function(array, ...properties) {
 		return arrayCopy;
 	}
 
-	arrayCopy.sort(function(prev, next) {
+	var stableCopy = arrayCopy.map((el, index) => [el, index]);
+
+	stableCopy.sort(function(prevData, nextData) {
+		var prev = prevData[0];
+		var next = nextData[0];
 		if (prev === undefined) {
 			return 1;
 		}
@@ -75,7 +79,7 @@ Mavo.Functions.sort = function(array, ...properties) {
 
 		// If it's an array of different types, we can't sort properly
 		if (typeof prev !== typeof next) {
-			return 0;
+			return prevData[1]-nextData[1];
 		}
 
 		// If there's no properties, attempt to sort primitives in increasing
@@ -86,7 +90,7 @@ Mavo.Functions.sort = function(array, ...properties) {
 			} else if (prev > next) {
 				return 1;
 			} else {
-				return 0;
+				return prevData[1]-nextData[1];
 			}
 		}
 
@@ -148,9 +152,9 @@ Mavo.Functions.sort = function(array, ...properties) {
 			// next property
 		}
 
-		// If we ended on a tie rather than a skip, return 0
+		// If we ended on a tie, stable sort the data
 		if (isTie) {
-			return 0;
+			return prevData[1]-nextData[1];
 		}
 
 		// Otherwise try and sort the values as-is
@@ -159,9 +163,13 @@ Mavo.Functions.sort = function(array, ...properties) {
 		} else if (prev > next) {
 			return 1;
 		} else {
-			return 0;
+			return prevData[1]-nextData[1];
 		}
 	});
+
+	for (let i = 0; i < arrayCopy.length; i++) {
+		arrayCopy[i] = stableCopy[i][0];
+	}
 
 	return arrayCopy;
 }
