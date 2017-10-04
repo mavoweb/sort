@@ -522,6 +522,10 @@ all Mavos</button>
 
 <section>
 	<h1>Other sort</h1>
+	
+	<p class="note">Note that the string "undefined" in the Actual and Expected columns
+	designates the value undefined, rather than the string undefined.  This is a
+	workaround for testing.</p>
 
 	<table class="reftest" data-test="expressionEvaluation" data-columns="3">
 		<tr title="Booleans">
@@ -532,29 +536,29 @@ all Mavos</button>
 			<td>sort([false, false, true, false], "-")</td>
 			<td>[true, false, false, false]</td>
 		</tr>
-		<tr title="Nulls mixed in ">
-			<td>sort([4, null, 2, 0, -2, null, 1, null])</td>
-			<td>[-2, 0, 1, 2, 4, null, null, null]</td>
+		<tr title="Nulls and undefined mixed in ">
+			<td>sort([4, null, 2, 0, -2, undefined, 1, null])</td>
+			<td>[-2, 0, 1, 2, 4, null, null, undefined]</td>
 		</tr>
 		<tr>
-			<td>sort([4, null, 2, 0, -2, null, 1, null], "-")</td>
-			<td>[4, 2, 1, 0, -2, null, null, null]</td>
+			<td>sort([4, null, 2, 0, -2, undefined, 1, null], "-")</td>
+			<td>[4, 2, 1, 0, -2, null, null, undefined]</td>
 		</tr>
 		<tr>
-			<td>sort(["a", null, null, "m", null, "n", null, "o", "z"])</td>
-			<td>["a", "m", "n", "o", "z", null, null, null, null]</td>
+			<td>sort(["a", null, undefined, "m", undefined, "n", null, "o", "z"])</td>
+			<td>["a", "m", "n", "o", "z", null, null, undefined, undefined]</td>
 		</tr>
 		<tr>
-			<td>sort(["a", null, null, "m", null, "n", null, "o", "z"], "-")</td>
-			<td>["z", "o", "n", "m", "a", null, null, null, null]</td>
+			<td>sort(["a", null, undefined, "m", undefined, "n", null, "o", "z"], "-")</td>
+			<td>["z", "o", "n", "m", "a", null, null, undefined, undefined]</td>
 		</tr>
 		<tr>
-			<td>sort([false, true, null, null, true, false])</td>
-			<td>[false, false, true, true, null, null]</td>
+			<td>sort([false, true, null, undefined, true, false])</td>
+			<td>[false, false, true, true, null, undefined]</td>
 		</tr>
 		<tr>
-			<td>sort([false, true, null, null, true, false], "-")</td>
-			<td>[true, true, false, false, null, null]</td>
+			<td>sort([false, true, null, undefined, true, false], "-")</td>
+			<td>[true, true, false, false, null, undefined]</td>
 		</tr>
 	</table>
 </section>
@@ -788,8 +792,67 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="Updating simple group (check all boxes and click Save)" class="interactive">
+		<tr title="Simple group (comma separated properties in mv-sort)">
 			<td mv-app mv-storage="#collection5">
+				<ul>
+					<li property="simpleGroup" mv-multiple mv-sort="prop2,-prop1">
+						<span style="color: blue" property="prop1"></span>
+						<span style="color: lightblue" property="prop2"></span>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">d</span>
+						<span style="color: lightblue">1</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">c</span>
+						<span style="color: lightblue">1</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">b</span>
+						<span style="color: lightblue">2</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">a</span>
+						<span style="color: lightblue">2</span>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection6">
+{
+	"simpleGroup": [
+		{
+			"prop1": "a",
+			"prop2": 2
+		},
+		{
+			"prop1": "b",
+			"prop2": 2
+		},
+		{
+			"prop1": "c",
+			"prop2": 1
+		},
+		{
+			"prop1": "d",
+			"prop2": 1
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Updating simple group (check all boxes and click Save)" class="interactive">
+			<td mv-app mv-storage="#collection6">
 				<div>
 					<input type="checkbox" mv-storage="none" property="check1">
 					<input type="checkbox" mv-storage="none" property="check2">
@@ -829,7 +892,75 @@ all Mavos</button>
 		</tr>
 		<tr>
 			<td>
-				<pre id="collection6">
+				<pre id="collection7">
+{
+	"simpleGroup": [
+		{
+			"prop1": "a",
+			"prop2": 2
+		},
+		{
+			"prop1": "b",
+			"prop2": 2
+		},
+		{
+			"prop1": "c",
+			"prop2": 1
+		},
+		{
+			"prop1": "d",
+			"prop2": 1
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Updating simple group (comma separated values in mv-sort) (check all boxes and click Save)" class="interactive">
+			<td mv-app mv-storage="#collection7">
+				<div>
+					<input type="checkbox" mv-storage="none" property="check1">
+					<input type="checkbox" mv-storage="none" property="check2">
+				</div>
+				<ul>
+					<li property="simpleGroup" mv-multiple mv-sort="[if(check1, 'prop2')],
+						[if (check2, '-prop1')]">
+						<span style="color: blue" property="prop1"></span>
+						<span style="color: lightblue" property="prop2"></span>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<div>
+					<input type="checkbox">
+					<input type="checkbox">
+				</div>
+				<ul>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">d</span>
+						<span style="color: lightblue">1</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">c</span>
+						<span style="color: lightblue">1</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">b</span>
+						<span style="color: lightblue">2</span>
+					</li>
+					<li mv-sort="prop2 -prop1">
+						<span style="color: blue">a</span>
+						<span style="color: lightblue">2</span>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection8">
 {
 	"deepGroup": [
 		{
@@ -881,7 +1012,7 @@ all Mavos</button>
 			</td>
 		</tr>
 		<tr title="Deep Group">
-			<td mv-app mv-storage="#collection6">
+			<td mv-app mv-storage="#collection8">
 				<ul>
 					<li property="deepGroup" mv-multiple mv-sort="prop11.prop12.prop13">
 						<div property="prop11">
@@ -940,7 +1071,7 @@ all Mavos</button>
 		</tr>
 		<tr>
 			<td>
-				<pre id="collection7">
+				<pre id="collection9">
 {
 	"deepGroup": [
 		{
@@ -992,7 +1123,7 @@ all Mavos</button>
 			</td>
 		</tr>
 		<tr title="Deep Group with update (check all boxes and click Save)" class="interactive">
-			<td mv-app mv-storage="#collection7">
+			<td mv-app mv-storage="#collection9">
 				<div>
 					<input type="checkbox" mv-storage="none" property="check1">
 				</div>
@@ -1058,7 +1189,7 @@ all Mavos</button>
 		</tr>
 		<tr>
 			<td>
-				<pre id="collection8">
+				<pre id="collection10">
 {
 	"nestedGroup": [
 		{
@@ -1100,7 +1231,7 @@ all Mavos</button>
 			</td>
 		</tr>
 		<tr title="Nested Groups">
-			<td mv-app mv-storage="#collection8">
+			<td mv-app mv-storage="#collection10">
 				<ul>
 					<li property="nestedGroup" mv-multiple mv-sort="prop11">
 						<div property="prop11"></div>
@@ -1147,7 +1278,7 @@ all Mavos</button>
 		</tr>
 		<tr>
 			<td>
-				<pre id="collection9">
+				<pre id="collection11">
 {
 	"nestedGroup": [
 		{
@@ -1189,7 +1320,7 @@ all Mavos</button>
 			</td>
 		</tr>
 		<tr title="Updating nested groups (check all boxes and click Save)" class="interactive">
-			<td mv-app mv-storage="#collection9">
+			<td mv-app mv-storage="#collection11">
 				<div>
 					<input type="checkbox" mv-storage="none" property="check1">
 					<input type="checkbox" mv-storage="none" property="check2">
@@ -1287,9 +1418,16 @@ function expressionEvaluation(test, result, expected) {
 
 			return Test.equals(JSON.stringify(r), JSON.stringify(eval(expected.textContent)));
 		} else {
-			result.textContent = JSON.stringify(r, null, 2);
-			expected.textContent = JSON.stringify(eval(expected.textContent), null, 2);
-			return Test.equals(r, eval(expected.textContent));
+			function undefinedString(k, v) {
+				if (v === undefined) {
+					return "undefined";
+				}
+				return v;
+			}
+			result.textContent = JSON.stringify(r, undefinedString, 2);
+			expected.textContent = JSON.stringify(eval(expected.textContent),
+					undefinedString, 2);
+			return Test.equals(eval(result.textContent), eval(expected.textContent));
 		}
   }
   catch(e) {

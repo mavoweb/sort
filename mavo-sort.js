@@ -39,9 +39,10 @@ Mavo.Plugins.register("sort", {
  * used to find the values to determine the sorting order
  * @param {Array} array - the array we want to sort
  * @param {...string} [properties] - variable number of properties to use to get
- * values from objects in array to determine sorting order. If none provided,
- * will treat items in array as primitives and attempt to sort in increasing
- * order
+ * values from objects in array to determine sorting order. The first property
+ * specified is preferred, and only moves on the next properties in the event of
+ * a tie. If none provided, will treat items in array as primitives and attempt
+ * to sort in increasing order
  */
 Mavo.Functions.sort = function(array, ...properties) {
 	var arrayCopy = array.slice();
@@ -176,7 +177,7 @@ Mavo.Functions.sort = function(array, ...properties) {
 Mavo.Collection.sortDOM = function(collection, sortProperties) {
 	if (typeof sortProperties === "string") {
 		sortProperties = sortProperties.trim();
-		sortProperties = sortProperties.split(/\s+/).filter(val => val.length > 0);
+		sortProperties = sortProperties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
 	}
 
 	var mavoNodes = collection.children;
