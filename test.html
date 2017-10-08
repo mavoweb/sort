@@ -1577,6 +1577,190 @@ all Mavos</button>
 				</ul>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<pre id="collection12">
+{
+	"prop13": 7,
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 2
+				},
+				"prop22": -2
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -1
+				},
+				"prop22": 1
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 0
+				},
+				"prop22": 0
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Referencing a deep property by just its property name (no dot
+			notation)">
+			<td mv-app mv-storage="#collection12">
+				<div property="prop13"></div>
+				<ul>
+					<li property="deepGroup" mv-multiple mv-sort="prop13">
+						<div property="prop11">
+							<div property="prop12">
+								<div property="prop13"></div>
+							</div>
+							<div property="prop22"></div>
+						</div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<div>7</div>
+				<ul>
+					<li>
+						<div>
+							<div>
+								<div>-1</div>
+							</div>
+							<div>1</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>0</div>
+							</div>
+							<div>0</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>2</div>
+							</div>
+							<div>-2</div>
+						</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection13">
+{
+	"simpleGroup": [
+		{
+			"prop1": "a",
+			"prop2": 2,
+			"prop3": 0
+		},
+		{
+			"prop1": "b",
+			"prop2": 2,
+			"prop3": 1
+		},
+		{
+			"prop1": "a",
+			"prop2": 2,
+			"prop3": 2
+		},
+		{
+			"prop1": "c",
+			"prop2": 1,
+			"prop3": 3
+		},
+		{
+			"prop1": "d",
+			"prop2": 1,
+			"prop3": 4
+		},
+		{
+			"prop1": "d",
+			"prop2": 1,
+			"prop3": 5
+		}
+	],
+	"props": [
+		"prop2",
+		"-prop1",
+		"-prop3"
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Using collection for sort properties">
+			<td mv-app mv-storage="#collection13">
+				<ul>
+					<li property="props" mv-multiple></li>
+				</ul>
+				<ul>
+					<li property="simpleGroup" mv-multiple mv-sort="[props]">
+						<span property="prop1"></span>
+						<span property="prop2"></span>
+						<span property="prop3"></span>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li>prop2</li><!--
+					--><li>-prop1</li><!--
+					--><li>-prop3</li>
+				</ul>
+				<ul>
+					<li>
+						<span>d</span>
+						<span>1</span>
+						<span>5</span>
+					</li>
+					<li>
+						<span>d</span>
+						<span>1</span>
+						<span>4</span>
+					</li>
+					<li>
+						<span>c</span>
+						<span>1</span>
+						<span>3</span>
+					</li>
+					<li>
+						<span>b</span>
+						<span>2</span>
+						<span>1</span>
+					</li>
+					<li>
+						<span>a</span>
+						<span>2</span>
+						<span>2</span>
+					</li>
+					<li>
+						<span>a</span>
+						<span>2</span>
+						<span>0</span>
+					</li>
+				</ul>
+			</td>
+		</tr>
 	</table>
 </section>
 

@@ -18,6 +18,8 @@ Mavo.Plugins.register("sort", {
 			}
 		},
 		'init-end': function(root) {
+			// TODO: Improve performance, will call sort for every element in the
+			// collection
 			if (root.element) {
 				var observer = new Mavo.Observer(root.element, "mv-sort", records => {
 					for (let record of records) {
@@ -69,11 +71,16 @@ Mavo.Functions.sort = function(array, ...properties) {
 			return -1;
 		}
 
+		var prevNode = null;
+		var nextNode = null;
+
 		// If the elements in the array are Mavo nodes, sort by their data
 		if (prev instanceof Mavo.Node) {
+			prevNode = prev;
 			prev = prev.getData();
 		}
 		if (next instanceof Mavo.Node) {
+			nextNode = next;
 			next = next.getData();
 		}
 
@@ -121,11 +128,24 @@ Mavo.Functions.sort = function(array, ...properties) {
 			}
 
 			var new_prev = prev, new_next = next;
+			var propFound = false;
 			if (property.length > 0) {
-				var nestedList = property.split(".");
+				if (prevNode !== null && nextNode !== null) {
+					var new_prev_node = prevNode.find(property);
+					var new_next_node = nextNode.find(property);
+					if (new_prev_node !== undefined && new_next_node !== undefined) {
+						propFound = true;
+						new_prev = new_prev_node.getData();
+						new_next = new_next_node.getData();
+					}
+				}
 
-				new_prev = $.value(prev, ...nestedList);
-				new_next = $.value(next, ...nestedList);
+				if (!propFound) {
+					var nestedList = property.split(".");
+
+					new_prev = $.value(prev, ...nestedList);
+					new_next = $.value(next, ...nestedList);
+				}
 
 				if (new_prev === undefined || new_next === undefined) {
 					continue;
