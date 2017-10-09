@@ -106,6 +106,8 @@ Mavo.Functions.sort = function(array, ...properties) {
 		for (let property of properties) {
 			isTie = false;
 			var inc;
+			var new_prev = prev, new_next = next;
+			var propFound = false;
 			if (typeof property === "number") {
 				inc = property >= 0;
 			} else if (typeof property === "string") {
@@ -123,13 +125,21 @@ Mavo.Functions.sort = function(array, ...properties) {
 					inc = false;
 					property = property.substring(1);
 				}
+			} else if (property instanceof Array) {
+				if (property.length !== array.length) {
+					throw new Error(`Attempting to sort array of length ` +
+							`${array.length} with array property of length ` +
+							`${property.length}, arrays must be the same length`);
+				}
+				// Assume inc is true, since there's no means to specify otherwise
+				inc = true;
+				new_prev = property[prevData[1]];
+				new_next = property[nextData[1]];
 			} else {
 				continue;
 			}
 
-			var new_prev = prev, new_next = next;
-			var propFound = false;
-			if (property.length > 0) {
+			if (typeof property === "string" && property.length > 0) {
 				if (prevNode !== null && nextNode !== null) {
 					var new_prev_node = prevNode.find(property);
 					var new_next_node = nextNode.find(property);
@@ -187,7 +197,7 @@ Mavo.Functions.sort = function(array, ...properties) {
 		}
 	});
 
-	for (let i = 0; i < arrayCopy.length; i++) {
+	for (let i = 0; i < arrayCopy.length; i+=1) {
 		arrayCopy[i] = stableCopy[i][0];
 	}
 

@@ -478,6 +478,223 @@ all Mavos</button>
 				}
 			]</td>
 		</tr>
+		<tr title="Deep objects, multiple properties, arrays representing
+			property values as arguments">
+			<td>sort([
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 1,
+							"prop32": 6
+						},
+						"prop22": 0
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 2,
+							"prop32": 6
+						},
+						"prop22": 1
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 2,
+							"prop32": 6
+						},
+						"prop22": -1
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 1,
+							"prop32": 5
+						},
+						"prop22": 0
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 2,
+							"prop32": 5
+						},
+						"prop22": 1
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 2,
+							"prop32": 5
+						},
+						"prop22": -1
+					}
+				}
+			], [6, 6, 6, 5, 5, 5], "-prop11.prop21.prop31", [0, 1, -1, 0, 1, -1])</td>
+			<td>[
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 2,
+							"prop32": 5
+						},
+						"prop22": -1
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 2,
+							"prop32": 5
+						},
+						"prop22": 1
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 1,
+							"prop32": 5
+						},
+						"prop22": 0
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 2,
+							"prop32": 6
+						},
+						"prop22": -1
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 2,
+							"prop32": 6
+						},
+						"prop22": 1
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 1,
+							"prop32": 6
+						},
+						"prop22": 0
+					}
+				}
+			]</td>
+		</tr>
+		<tr title="Stable sort">
+			<td>sort([
+				{
+					"prop1": 0,
+					"prop2": 0
+				},
+				{
+					"prop1": 1,
+					"prop2": 0
+				},
+				{
+					"prop1": 2,
+					"prop2": 0
+				},
+				{
+					"prop1": 3,
+					"prop2": 1
+				},
+				{
+					"prop1": 4,
+					"prop2": 1
+				},
+				{
+					"prop1": 5,
+					"prop2": 1
+				},
+				{
+					"prop1": 6,
+					"prop2": -1
+				},
+				{
+					"prop1": 7,
+					"prop2": -1
+				},
+				{
+					"prop1": 8,
+					"prop2": -1
+				},
+				{
+					"prop1": 9,
+					"prop2": 0
+				},
+				{
+					"prop1": 10,
+					"prop2": 0
+				},
+				{
+					"prop1": 11,
+					"prop2": 0
+				}
+			], "prop2")</td>
+			<td>[
+				{
+					"prop1": 6,
+					"prop2": -1
+				},
+				{
+					"prop1": 7,
+					"prop2": -1
+				},
+				{
+					"prop1": 8,
+					"prop2": -1
+				},
+				{
+					"prop1": 0,
+					"prop2": 0
+				},
+				{
+					"prop1": 1,
+					"prop2": 0
+				},
+				{
+					"prop1": 2,
+					"prop2": 0
+				},
+				{
+					"prop1": 9,
+					"prop2": 0
+				},
+				{
+					"prop1": 10,
+					"prop2": 0
+				},
+				{
+					"prop1": 11,
+					"prop2": 0
+				},
+				{
+					"prop1": 3,
+					"prop2": 1
+				},
+				{
+					"prop1": 4,
+					"prop2": 1
+				},
+				{
+					"prop1": 5,
+					"prop2": 1
+				}
+			]</td>
+		</tr>
 		<tr title="Stable sort decreasing">
 			<td>sort([
 				{
@@ -1588,7 +1805,7 @@ all Mavos</button>
 				"prop12": {
 					"prop13": 2
 				},
-				"prop22": -2
+				"prop22": 0
 			}
 		},
 		{
@@ -1602,9 +1819,25 @@ all Mavos</button>
 		{
 			"prop11": {
 				"prop12": {
+					"prop13": 5
+				},
+				"prop22": 2
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 4
+				},
+				"prop22": 3
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
 					"prop13": 0
 				},
-				"prop22": 0
+				"prop22": 4
 			}
 		}
 	]
@@ -1646,7 +1879,7 @@ all Mavos</button>
 							<div>
 								<div>0</div>
 							</div>
-							<div>0</div>
+							<div>4</div>
 						</div>
 					</li>
 					<li>
@@ -1654,7 +1887,23 @@ all Mavos</button>
 							<div>
 								<div>2</div>
 							</div>
-							<div>-2</div>
+							<div>0</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>4</div>
+							</div>
+							<div>3</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>5</div>
+							</div>
+							<div>2</div>
 						</div>
 					</li>
 				</ul>
@@ -1663,6 +1912,121 @@ all Mavos</button>
 		<tr>
 			<td>
 				<pre id="collection13">
+{
+	"prop13": 7,
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 2
+				},
+				"prop22": 0
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -1
+				},
+				"prop22": 1
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 5
+				},
+				"prop22": 2
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 4
+				},
+				"prop22": 3
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 0
+				},
+				"prop22": 4
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Referencing a deep property by just its property name (no dot
+			notation, decreasing order)">
+			<td mv-app mv-storage="#collection13">
+				<div property="prop13"></div>
+				<ul>
+					<li property="deepGroup" mv-multiple mv-sort="-prop13">
+						<div property="prop11">
+							<div property="prop12">
+								<div property="prop13"></div>
+							</div>
+							<div property="prop22"></div>
+						</div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<div>7</div>
+				<ul>
+					<li>
+						<div>
+							<div>
+								<div>5</div>
+							</div>
+							<div>2</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>4</div>
+							</div>
+							<div>3</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>2</div>
+							</div>
+							<div>0</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>0</div>
+							</div>
+							<div>4</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>-1</div>
+							</div>
+							<div>1</div>
+						</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection14">
 {
 	"simpleGroup": [
 		{
@@ -1709,7 +2073,7 @@ all Mavos</button>
 			</td>
 		</tr>
 		<tr title="Using collection for sort properties">
-			<td mv-app mv-storage="#collection13">
+			<td mv-app mv-storage="#collection14">
 				<ul>
 					<li property="props" mv-multiple></li>
 				</ul>
@@ -1757,6 +2121,122 @@ all Mavos</button>
 						<span>a</span>
 						<span>2</span>
 						<span>0</span>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection15">
+{
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 5
+				},
+				"prop22": 0
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -1
+				},
+				"prop22": 1
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 2
+				},
+				"prop22": 2
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Unsorted collection and sorted collection referenced with
+			mv-value (passing collection itself as argument)">
+			<td mv-app mv-storage="#collection15">
+				<ul>
+					<li property="deepGroup" mv-multiple>
+						<div property="prop11">
+							<div property="prop12">
+								<div property="prop13"></div>
+							</div>
+							<div property="prop22"></div>
+						</div>
+					</li>
+				</ul>
+				<ul>
+					<li property="deepGroup2" mv-multiple mv-value="sort(deepGroup, prop13)">
+						<div property="prop11">
+							<div property="prop12">
+								<div>[prop13]</div>
+							</div>
+							<div property="prop22"></div>
+						</div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li>
+						<div>
+							<div>
+								<div>5</div>
+							</div>
+							<div>0</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>-1</div>
+							</div>
+							<div>1</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>2</div>
+							</div>
+							<div>2</div>
+						</div>
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<div>
+							<div>
+								<div>-1</div>
+							</div>
+							<div>1</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>2</div>
+							</div>
+							<div>2</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>5</div>
+							</div>
+							<div>0</div>
+						</div>
 					</li>
 				</ul>
 			</td>
