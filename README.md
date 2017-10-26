@@ -80,19 +80,22 @@ Say our `things` collection has a bit more complex structure.  We can specify ho
 
 #### Updating Sort
 We can use expressions to have our list resort itself based on a property!
-Let's use our `things` collection again, but this time specify how to sort it
-using a `select` menu.
+Here we have a collection of restaurants, where each restaurant has a name,
+rating, and opening and closing time displayed in the collection.  One way to
+specify how we'd like to sort it is by using a select menu.
 ```
-<div mv-storage="none">
-	<select property="sortProp">
-		<option value="prop1">Property 1</option>
-		<option value="prop2">Property 2</option>
-		<option value="prop3">Property 3</option>
+<div>
+	<select mv-storage="none" property="restaurantsSort">
+		<option value="name">Restaurant name</option>
+		<option value="rating">Rating</option>
+		<option value="openTime">Open time</option>
+		<option value="closeTime">Closing time</option>
 	</select>
 	<div mv-multiple="things" mv-sort="[sortProp]">
-		<div property="prop1"></div>
-		<div property="prop2"></div>
-		<div property="prop3"></div>
+		<div property="name"></div>
+		<div property="rating"></div>
+		<div property="openTime"></div>
+		<div property="closeTime"></div>
 	</div>
 </div>
 
