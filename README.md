@@ -69,12 +69,12 @@ Note that the following two examples will **not** sort the collection:
 Say our `things` collection has a bit more complex structure.  We can specify how to sort it by specifying the properties to sort it by. The following example will sort `things` by `prop31` in decreasing order, and will break any ties by sorting those ties by `prop12` in increasing order:
 ```
 <div mv-multiple="things" mv-sort="-prop31 prop12">
-  <div property="prop11">
-    <div property="prop21">
-      <div property="prop31"></div>
-    </div>
-  </div>
-  <div property="prop12"></div>
+	<div property="prop11">
+		<div property="prop21">
+			<div property="prop31"></div>
+		</div>
+	</div>
+	<div property="prop12"></div>
 </div>
 ```
 
