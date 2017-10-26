@@ -66,7 +66,7 @@ Note that the following two examples will **not** sort the collection:
 ```
 
 #### Collections of Groups
-Say our`things` collection has a bit more complex structure.  We can specify how to sort it by specifying the properties to sort it by. The following example will sort `things` by `prop31` in decreasing order, and will break any ties by sorting those ties by `prop12` in increasing order:
+Say our `things` collection has a bit more complex structure.  We can specify how to sort it by specifying the properties to sort it by. The following example will sort `things` by `prop31` in decreasing order, and will break any ties by sorting those ties by `prop12` in increasing order:
 ```
 <div mv-multiple="things" mv-sort="-prop31 prop12">
   <div property="prop11">
@@ -78,6 +78,25 @@ Say our`things` collection has a bit more complex structure.  We can specify how
 </div>
 ```
 
+#### Updating Sort
+We can use expressions to have our list resort itself based on a property!
+Let's use our `things` collection again, but this time specify how to sort it
+using a `select` menu.
+```
+<div mv-storage="none">
+	<select property="sortProp">
+		<option value="prop1">Property 1</option>
+		<option value="prop2">Property 2</option>
+		<option value="prop3">Property 3</option>
+	</select>
+	<div mv-multiple="things" mv-sort="[sortProp]">
+		<div property="prop1"></div>
+		<div property="prop2"></div>
+		<div property="prop3"></div>
+	</div>
+</div>
+
+```
 
 ### Usage
 `mv-sort="prop1 prop2 prop3 ..."`
