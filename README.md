@@ -85,7 +85,7 @@ rating, and opening and closing time displayed in the collection.  One way to
 specify how we'd like to sort it is by using a select menu.
 
 ## Demo
-```
+```markup
 <div>
 	<select mv-storage="none" property="restaurantsSort">
 		<option value="name">Restaurant name</option>
