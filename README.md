@@ -86,7 +86,7 @@ specify how we'd like to sort it is by using a select menu.
 
 ## Demo
 ```markup
-<div>
+<div mv-app="restaurants">
 	<select mv-storage="none" property="restaurantsSort">
 		<option value="name">Restaurant name</option>
 		<option value="rating">Rating</option>
