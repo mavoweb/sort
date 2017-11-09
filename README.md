@@ -9,12 +9,12 @@ Use `sort` in expressions to produce a sorted collection.
 
 ### Example
 In one part of our app, say we've defined an arbitrary collection of primitives named `things`.
-```
+```html
 <div mv-multiple="things">...</div>
 ```
 
 If we'd like to show a sorted version of this collection in another part of our app, we can do something like:
-```
+```html
 <div property="other_things" mv-multiple mv-value="sort(collection, '-')">...</div>
 ```
 
@@ -49,25 +49,25 @@ Attach `mv-sort` as an attribute on where a collection is initially declared to 
 ### Examples
 #### Collections of Primitives
 Say we've defined an arbitrary collection of primitives named `things`, and we want to sort it in increasing order.  We can accomplish this with:
-```
+```html
 <div mv-multiple="things" mv-sort="+"></div>
 ```
 Or for decreasing order:
-```
+```html
 <div mv-multiple="things" mv-sort="-"></div>
 ```
 
 Note that the following two examples will **not** sort the collection:
-```
+```html
 <div mv-multiple="things" mv-sort></div>
 ```
-```
+```html
 <div mv-multiple="things" mv-sort=""></div>
 ```
 
 #### Collections of Groups
 Say our `things` collection has a bit more complex structure.  We can specify how to sort it by specifying the properties to sort it by. The following example will sort `things` by `prop31` in decreasing order, and will break any ties by sorting those ties by `prop12` in increasing order:
-```
+```html
 <div mv-multiple="things" mv-sort="-prop31 prop12">
 	<div property="prop11">
 		<div property="prop21">
@@ -84,7 +84,7 @@ Here we have a collection of restaurants, where each restaurant has a name,
 rating, and opening and closing time displayed in the collection.  One way to
 specify how we'd like to sort it is by using a select menu.
 
-```
+```html
 <div>
 	<select mv-storage="none" property="restaurantsSort">
 		<option value="name">Restaurant name</option>
