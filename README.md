@@ -83,6 +83,8 @@ We can use expressions to have our list resort itself based on a property!
 Here we have a collection of restaurants, where each restaurant has a name,
 rating, and opening and closing time displayed in the collection.  One way to
 specify how we'd like to sort it is by using a select menu.
+
+## Demo
 ```
 <div>
 	<select mv-storage="none" property="restaurantsSort">
@@ -91,7 +93,7 @@ specify how we'd like to sort it is by using a select menu.
 		<option value="openTime">Open time</option>
 		<option value="closeTime">Closing time</option>
 	</select>
-	<div mv-multiple="things" mv-sort="[sortProp]">
+	<div mv-multiple="things" mv-sort="[restaurantsSort]">
 		<div property="name"></div>
 		<div property="rating"></div>
 		<div property="openTime"></div>
