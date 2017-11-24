@@ -205,6 +205,58 @@ Mavo.Functions.sort = function(array, ...properties) {
 }
 
 /**
+ * Takes an array of objects or Mavo Nodes, and returns a nested dictionary
+ * grouping items based on the given properties
+ * @param {Array} array - the array we want to group
+ * @param {...string} properties - variable number of properties to use to group
+ * the provided array.  Each property name provided will look for property
+ * values of the items of the array that are the same, and group them together
+ * in the returned dictionary.
+ */
+Mavo.Functions.groupBy = function(array, ...properties) {
+	var output = {};
+
+	var sorted = Mavo.Functions.sort(array, ...properties);
+
+	// TODO: What to do if too many groups
+
+	for (let item of array) {
+		if (item instanceof Mavo.Node) {
+			item = item.getData();
+		}
+
+		// TODO: For now, skip property that doesn't exist in array item
+		var current = output;
+		var propVal = null;
+
+		for (let property of properties) {
+			if (item.hasOwnProperty(property)) {
+				if (propVal !== null) {
+					if (!current.hasOwnProperty(propVal)) {
+						current[propVal] = {};
+					}
+					current = current[propVal];
+				}
+
+				propVal = item[property];
+			}
+		}
+
+		if (propVal !== null) {
+			if (!current.hasOwnProperty(propVal)) {
+				current[propVal] = [];
+			}
+
+			current[propVal].push(item);
+		}
+
+
+	}
+
+	return output;
+}
+
+/**
  * Sorts the elements in the DOM corresponding to a collection based on the
  * properties given in sortProperties. sortProperties can either be a space
  * separated string of property names, or an array of string property names.

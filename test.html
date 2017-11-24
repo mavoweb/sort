@@ -2244,6 +2244,123 @@ all Mavos</button>
 	</table>
 </section>
 
+<h1>Group tests</h1>
+
+<section>
+	<h1>Group simple objects</h1>
+	<table class="reftest" data-test="expressionEvaluation" data-columns="3">
+
+		<tr title="Empty array no properties">
+			<td>groupBy([])</td>
+			<td>({})</td>
+		</tr>
+
+		<tr title="Empty array some properties">
+			<td>groupBy([], "prop1", "prop2", "prop3")</td>
+			<td>({})</td>
+		</tr>
+
+		<tr title="Non-empty array no properties">
+			<td>groupBy([
+				{"id": 0, "p1": "p1v1"},
+				{"id": 1, "p1": "p1v1"},
+				{"id": 2, "p1": "p1v2"},
+				{"id": 3, "p1": "p1v2"}
+			])</td>
+			<td>({})</td>
+		</tr>
+
+		<tr title="Non-empty array one property">
+			<td>groupBy([
+				{"id": 0, "p1": "p1v1"},
+				{"id": 1, "p1": "p1v1"},
+				{"id": 2, "p1": "p1v2"},
+				{"id": 3, "p1": "p1v2"}
+			], "p1")</td>
+			<td>({
+				"p1v1": [
+					{"id": 0, "p1": "p1v1"},
+					{"id": 1, "p1": "p1v1"}
+				],
+				"p1v2": [
+					{"id": 2, "p1": "p1v2"},
+					{"id": 3, "p1": "p1v2"}
+				]
+			})</td>
+		</tr>
+
+		<tr title="Non-empty array multiple properties">
+			<td>groupBy([
+				{"id": 0, "p1": "p1v1", "p2": "p2v1"},
+				{"id": 1, "p1": "p1v1", "p2": "p2v1"},
+				{"id": 2, "p1": "p1v1", "p2": "p2v2"},
+				{"id": 3, "p1": "p1v1", "p2": "p2v2"},
+				{"id": 4, "p1": "p1v2", "p2": "p2v1"},
+				{"id": 5, "p1": "p1v2", "p2": "p2v1"},
+				{"id": 6, "p1": "p1v2", "p2": "p2v2"},
+				{"id": 7, "p1": "p1v2", "p2": "p2v2"},
+			], "p1", "p2")</td>
+			<td>({
+				"p1v1": {
+					"p2v1": [
+						{"id": 0, "p1": "p1v1", "p2": "p2v1"},
+						{"id": 1, "p1": "p1v1", "p2": "p2v1"},
+					],
+					"p2v2": [
+						{"id": 2, "p1": "p1v1", "p2": "p2v2"},
+						{"id": 3, "p1": "p1v1", "p2": "p2v2"},
+					],
+				},
+				"p1v2": {
+					"p2v1": [
+						{"id": 4, "p1": "p1v2", "p2": "p2v1"},
+						{"id": 5, "p1": "p1v2", "p2": "p2v1"},
+					],
+					"p2v2": [
+						{"id": 6, "p1": "p1v2", "p2": "p2v2"},
+						{"id": 7, "p1": "p1v2", "p2": "p2v2"},
+					],
+				},
+			})</td>
+		</tr>
+		
+		<tr title="Non-empty array multiple properties, stable">
+			<td>groupBy([
+				{"id": 3, "p1": "p1v1", "p2": "p2v2"},
+				{"id": 0, "p1": "p1v1", "p2": "p2v1"},
+				{"id": 5, "p1": "p1v2", "p2": "p2v1"},
+				{"id": 7, "p1": "p1v2", "p2": "p2v2"},
+				{"id": 4, "p1": "p1v2", "p2": "p2v1"},
+				{"id": 1, "p1": "p1v1", "p2": "p2v1"},
+				{"id": 2, "p1": "p1v1", "p2": "p2v2"},
+				{"id": 6, "p1": "p1v2", "p2": "p2v2"},
+			], "p1", "p2")</td>
+			<td>({
+				"p1v1": {
+					"p2v2": [
+						{"id": 3, "p1": "p1v1", "p2": "p2v2"},
+						{"id": 2, "p1": "p1v1", "p2": "p2v2"},
+					],
+					"p2v1": [
+						{"id": 0, "p1": "p1v1", "p2": "p2v1"},
+						{"id": 1, "p1": "p1v1", "p2": "p2v1"},
+					],
+				},
+				"p1v2": {
+					"p2v1": [
+						{"id": 5, "p1": "p1v2", "p2": "p2v1"},
+						{"id": 4, "p1": "p1v2", "p2": "p2v1"},
+					],
+					"p2v2": [
+						{"id": 7, "p1": "p1v2", "p2": "p2v2"},
+						{"id": 6, "p1": "p1v2", "p2": "p2v2"},
+					],
+				},
+			})</td>
+		</tr>
+	</table>
+</section>
+
 <script src="mavo-sort.js"></script>
 
 <script src="https://test.mavo.io/test.js"></script>
@@ -2267,6 +2384,9 @@ function getObjectArrayString(a) {
 	s += '\n]';
 	return s;
 }
+function ev(s) {
+	return eval("(" + s + ")");
+}
 function expressionEvaluation(test, result, expected) {
   try {
     var r = (new Mavo.Expression(test.textContent)).eval({});
@@ -2281,10 +2401,10 @@ function expressionEvaluation(test, result, expected) {
 				expected = expected.appendChild(code2);
 
 				result.textContent = getObjectArrayString(r);
-				expected.textContent = getObjectArrayString(eval(expectedTextContent));
+				expected.textContent = getObjectArrayString(ev(expectedTextContent));
 			}
 
-			return Test.equals(JSON.stringify(r), JSON.stringify(eval(expected.textContent)));
+			return Test.equals(JSON.stringify(r), JSON.stringify(ev(expected.textContent)));
 		} else {
 			function undefinedString(k, v) {
 				if (v === undefined) {
@@ -2293,9 +2413,15 @@ function expressionEvaluation(test, result, expected) {
 				return v;
 			}
 			result.textContent = JSON.stringify(r, undefinedString, 2);
-			expected.textContent = JSON.stringify(eval(expected.textContent),
+			expected.textContent = JSON.stringify(ev(expected.textContent),
 					undefinedString, 2);
-			return Test.equals(eval(result.textContent), eval(expected.textContent));
+			var exVal = ev(expected.textContent);
+			var acVal = ev(result.textContent);
+			if (exVal instanceof Object && acVal instanceof Object) {
+				exVal = JSON.stringify(exVal);
+				acVal = JSON.stringify(acVal);
+			}
+			return Test.equals(exVal, acVal);
 		}
   }
   catch(e) {
