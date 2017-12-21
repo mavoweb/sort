@@ -146,9 +146,9 @@ all Mavos</button>
 				{"prop1": "c", "prop2": 1},
 			], "prop1")</td>
 			<td>[
-				{"prop1": "a", "prop2": 3},
-				{"prop1": "b", "prop2": 2},
 				{"prop1": "c", "prop2": 1},
+				{"prop1": "b", "prop2": 2},
+				{"prop1": "a", "prop2": 3},
 			]</td>
 		</tr>
 		<tr>
@@ -158,9 +158,9 @@ all Mavos</button>
 				{"prop1": "c", "prop2": 1},
 			], "prop2")</td>
 			<td>[
-				{"prop1": "c", "prop2": 1},
-				{"prop1": "b", "prop2": 2},
 				{"prop1": "a", "prop2": 3},
+				{"prop1": "b", "prop2": 2},
+				{"prop1": "c", "prop2": 1},
 			]</td>
 		</tr>
 
@@ -220,7 +220,7 @@ all Mavos</button>
 				{"prop1": "a", "prop2": 2},
 				{"prop1": "c", "prop2": 1},
 				{"prop1": "d", "prop2": 1},
-			], "prop2", "-prop1")</td>
+			], "+prop2", "-prop1")</td>
 			<td>[
 				{"prop1": "d", "prop2": 1},
 				{"prop1": "c", "prop2": 1},
@@ -426,7 +426,7 @@ all Mavos</button>
 					"prop1": 11,
 					"prop2": 0
 				}
-			], "prop2")</td>
+			], "+prop2")</td>
 			<td>[
 				{
 					"prop1": 6,
@@ -485,7 +485,7 @@ all Mavos</button>
 					"prop11": {
 						"prop21": {
 							"prop31": 1,
-							"prop32": 6
+							"prop32": 5
 						},
 						"prop22": 0
 					}
@@ -494,7 +494,7 @@ all Mavos</button>
 					"prop11": {
 						"prop21": {
 							"prop31": 2,
-							"prop32": 6
+							"prop32": 5
 						},
 						"prop22": 1
 					}
@@ -503,7 +503,7 @@ all Mavos</button>
 					"prop11": {
 						"prop21": {
 							"prop31": 2,
-							"prop32": 6
+							"prop32": 5
 						},
 						"prop22": -1
 					}
@@ -512,7 +512,7 @@ all Mavos</button>
 					"prop11": {
 						"prop21": {
 							"prop31": 1,
-							"prop32": 5
+							"prop32": 6
 						},
 						"prop22": 0
 					}
@@ -521,7 +521,7 @@ all Mavos</button>
 					"prop11": {
 						"prop21": {
 							"prop31": 2,
-							"prop32": 5
+							"prop32": 6
 						},
 						"prop22": 1
 					}
@@ -530,38 +530,20 @@ all Mavos</button>
 					"prop11": {
 						"prop21": {
 							"prop31": 2,
-							"prop32": 5
+							"prop32": 6
 						},
 						"prop22": -1
 					}
 				}
-			], [6, 6, 6, 5, 5, 5], "-prop11.prop21.prop31", [0, 1, -1, 0, 1, -1])</td>
+			], [5, 5, 5, 6, 6, 6], "-prop11.prop21.prop31", [0, 1, -1, 0, 1, -1])</td>
 			<td>[
 				{
 					"prop11": {
 						"prop21": {
 							"prop31": 2,
-							"prop32": 5
-						},
-						"prop22": -1
-					}
-				},
-				{
-					"prop11": {
-						"prop21": {
-							"prop31": 2,
-							"prop32": 5
+							"prop32": 6
 						},
 						"prop22": 1
-					}
-				},
-				{
-					"prop11": {
-						"prop21": {
-							"prop31": 1,
-							"prop32": 5
-						},
-						"prop22": 0
 					}
 				},
 				{
@@ -576,8 +558,17 @@ all Mavos</button>
 				{
 					"prop11": {
 						"prop21": {
-							"prop31": 2,
+							"prop31": 1,
 							"prop32": 6
+						},
+						"prop22": 0
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
+							"prop31": 2,
+							"prop32": 5
 						},
 						"prop22": 1
 					}
@@ -585,12 +576,21 @@ all Mavos</button>
 				{
 					"prop11": {
 						"prop21": {
+							"prop31": 2,
+							"prop32": 5
+						},
+						"prop22": -1
+					}
+				},
+				{
+					"prop11": {
+						"prop21": {
 							"prop31": 1,
-							"prop32": 6
+							"prop32": 5
 						},
 						"prop22": 0
 					}
-				}
+				},
 			]</td>
 		</tr>
 		<tr title="Stable sort">
@@ -643,7 +643,7 @@ all Mavos</button>
 					"prop1": 11,
 					"prop2": 0
 				}
-			], "prop2")</td>
+			], "+prop2")</td>
 			<td>[
 				{
 					"prop1": 6,
@@ -943,7 +943,7 @@ all Mavos</button>
 
 <section>
 	<h1>Other sort</h1>
-	
+
 	<p class="note">Note that the string "undefined" in the Actual and Expected columns
 	designates the value undefined, rather than the string undefined.  This is a
 	workaround for testing.</p>
@@ -1157,7 +1157,7 @@ all Mavos</button>
 		<tr title="Simple group">
 			<td mv-app mv-storage="#collection4">
 				<ul>
-					<li property="simpleGroup" mv-multiple mv-sort="prop2 -prop1">
+					<li property="simpleGroup" mv-multiple mv-sort="+prop2 -prop1">
 						<span style="color: blue" property="prop1"></span>
 						<span style="color: lightblue" property="prop2"></span>
 					</li>
@@ -1165,19 +1165,19 @@ all Mavos</button>
 			</td>
 			<td>
 				<ul>
-					<li mv-sort="prop2 -prop1">
+					<li>
 						<span style="color: blue">d</span>
 						<span style="color: lightblue">1</span>
 					</li>
-					<li mv-sort="prop2 -prop1">
+					<li>
 						<span style="color: blue">c</span>
 						<span style="color: lightblue">1</span>
 					</li>
-					<li mv-sort="prop2 -prop1">
+					<li>
 						<span style="color: blue">b</span>
 						<span style="color: lightblue">2</span>
 					</li>
-					<li mv-sort="prop2 -prop1">
+					<li>
 						<span style="color: blue">a</span>
 						<span style="color: lightblue">2</span>
 					</li>
@@ -1216,7 +1216,7 @@ all Mavos</button>
 		<tr title="Simple group (comma separated properties in mv-sort)">
 			<td mv-app mv-storage="#collection5">
 				<ul>
-					<li property="simpleGroup" mv-multiple mv-sort="prop2,-prop1">
+					<li property="simpleGroup" mv-multiple mv-sort="+prop2,-prop1">
 						<span style="color: blue" property="prop1"></span>
 						<span style="color: lightblue" property="prop2"></span>
 					</li>
@@ -1279,7 +1279,7 @@ all Mavos</button>
 					<input type="checkbox" mv-storage="none" property="check2">
 				</div>
 				<ul>
-					<li property="simpleGroup" mv-multiple mv-sort="[if(check1, 'prop2')]
+					<li property="simpleGroup" mv-multiple mv-sort="[if(check1, '+prop2')]
 						[if (check2, '-prop1')]">
 						<span style="color: blue" property="prop1"></span>
 						<span style="color: lightblue" property="prop2"></span>
@@ -1347,7 +1347,7 @@ all Mavos</button>
 					<input type="checkbox" mv-storage="none" property="check2">
 				</div>
 				<ul>
-					<li property="simpleGroup" mv-multiple mv-sort="[if(check1, 'prop2')],
+					<li property="simpleGroup" mv-multiple mv-sort="[if(check1, '+prop2')],
 						[if (check2, '-prop1')]">
 						<span style="color: blue" property="prop1"></span>
 						<span style="color: lightblue" property="prop2"></span>
@@ -1435,7 +1435,7 @@ all Mavos</button>
 		<tr title="Deep Group">
 			<td mv-app mv-storage="#collection8">
 				<ul>
-					<li property="deepGroup" mv-multiple mv-sort="prop11.prop12.prop13">
+					<li property="deepGroup" mv-multiple mv-sort="+prop11.prop12.prop13">
 						<div property="prop11">
 							<div property="prop12">
 								<div property="prop13"></div>
@@ -1654,7 +1654,7 @@ all Mavos</button>
 		<tr title="Nested Groups">
 			<td mv-app mv-storage="#collection10">
 				<ul>
-					<li property="nestedGroup" mv-multiple mv-sort="prop11">
+					<li property="nestedGroup" mv-multiple mv-sort="+prop11">
 						<div property="prop11"></div>
 						<ul>
 							<li property="prop12" mv-multiple mv-sort="-"></li>
@@ -1747,7 +1747,7 @@ all Mavos</button>
 					<input type="checkbox" mv-storage="none" property="check2">
 				</div>
 				<ul>
-					<li property="nestedGroup" mv-multiple mv-sort="[if(check1, 'prop11')]">
+					<li property="nestedGroup" mv-multiple mv-sort="[if(check1, '+prop11')]">
 						<div property="prop11"></div>
 						<ul>
 							<li property="prop12" mv-multiple mv-sort="[if(check2, '-')]"></li>
@@ -1853,7 +1853,7 @@ all Mavos</button>
 			<td mv-app mv-storage="#collection12">
 				<div property="prop13"></div>
 				<ul>
-					<li property="deepGroup" mv-multiple mv-sort="prop13">
+					<li property="deepGroup" mv-multiple mv-sort="+prop13">
 						<div property="prop11">
 							<div property="prop12">
 								<div property="prop13"></div>
@@ -2061,7 +2061,7 @@ all Mavos</button>
 		}
 	],
 	"props": [
-		"prop2",
+		"+prop2",
 		"-prop1",
 		"-prop3"
 	]
@@ -2087,7 +2087,7 @@ all Mavos</button>
 			</td>
 			<td>
 				<ul>
-					<li>prop2</li><!--
+					<li>+prop2</li><!--
 					--><li>-prop1</li><!--
 					--><li>-prop3</li>
 				</ul>
@@ -2133,9 +2133,9 @@ all Mavos</button>
 		{
 			"prop11": {
 				"prop12": {
-					"prop13": 5
+					"prop13": 2
 				},
-				"prop22": 0
+				"prop22": 2
 			}
 		},
 		{
@@ -2149,9 +2149,9 @@ all Mavos</button>
 		{
 			"prop11": {
 				"prop12": {
-					"prop13": 2
+					"prop13": 5
 				},
-				"prop22": 2
+				"prop22": 0
 			}
 		}
 	]
@@ -2191,9 +2191,9 @@ all Mavos</button>
 					<li>
 						<div>
 							<div>
-								<div>5</div>
+								<div>2</div>
 							</div>
-							<div>0</div>
+							<div>2</div>
 						</div>
 					</li>
 					<li>
@@ -2207,9 +2207,9 @@ all Mavos</button>
 					<li>
 						<div>
 							<div>
-								<div>2</div>
+								<div>5</div>
 							</div>
-							<div>2</div>
+							<div>0</div>
 						</div>
 					</li>
 				</ul>
@@ -2217,9 +2217,9 @@ all Mavos</button>
 					<li>
 						<div>
 							<div>
-								<div>-1</div>
+								<div>5</div>
 							</div>
-							<div>1</div>
+							<div>0</div>
 						</div>
 					</li>
 					<li>
@@ -2233,9 +2233,9 @@ all Mavos</button>
 					<li>
 						<div>
 							<div>
-								<div>5</div>
+								<div>-1</div>
 							</div>
-							<div>0</div>
+							<div>1</div>
 						</div>
 					</li>
 				</ul>
@@ -2323,7 +2323,7 @@ all Mavos</button>
 				},
 			})</td>
 		</tr>
-		
+
 		<tr title="Non-empty array multiple properties, stable">
 			<td>groupBy([
 				{"id": 3, "p1": "p1v1", "p2": "p2v2"},
@@ -2357,6 +2357,270 @@ all Mavos</button>
 					],
 				},
 			})</td>
+		</tr>
+	</table>
+</section>
+
+<h1>mv-groupBy tests</h1>
+
+<section>
+	<h1>Collection sort</h1>
+	<table class="reftest">
+		<tr>
+			<td>
+				<pre id="collection16">
+{
+	"simpleCollection": [
+		{
+			"id": 0,
+			"p1": "p1v1"
+		},
+		{
+			"id": 1,
+			"p1": "p1v1"
+		},
+		{
+			"id": 2,
+			"p1": "p1v2"
+		},
+		{
+			"id": 3,
+			"p1": "p1v2"
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="TODO: Empty mv-groupBy">
+			<td mv-app mv-storage="#collection16">
+				<ul>
+					<li property="simpleCollection" mv-multiple mv-groupBy>
+						<div property="id"></div>
+						<div property="p1"></div>
+						<br>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-groupBy>
+						<div>0</div>
+						<div>p1v1</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>1</div>
+						<div>p1v1</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>2</div>
+						<div>p1v2</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>3</div>
+						<div>p1v2</div>
+						<br>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection17">
+{
+	"simpleCollection": [
+		{
+			"id": 0,
+			"p1": "p1v1"
+		},
+		{
+			"id": 1,
+			"p1": "p1v1"
+		},
+		{
+			"id": 2,
+			"p1": "p1v2"
+		},
+		{
+			"id": 3,
+			"p1": "p1v2"
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="TODO: Empty string mv-groupBy">
+			<td mv-app mv-storage="#collection17">
+				<ul>
+					<li property="simpleCollection" mv-multiple mv-groupBy="">
+						<div property="id"></div>
+						<div property="p1"></div>
+						<br>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-groupBy>
+						<div>0</div>
+						<div>p1v1</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>1</div>
+						<div>p1v1</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>2</div>
+						<div>p1v2</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>3</div>
+						<div>p1v2</div>
+						<br>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection18">
+{
+	"simpleCollection": [
+		{
+			"id": 0,
+			"p1": "p1v1"
+		},
+		{
+			"id": 1,
+			"p1": "p1v1"
+		},
+		{
+			"id": 2,
+			"p1": "p1v2"
+		},
+		{
+			"id": 3,
+			"p1": "p1v2"
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="TODO: mv-groupBy single property mv-group-heading">
+			<td mv-app mv-storage="#collection18">
+				<ul>
+					<li property="simpleCollection" mv-multiple mv-groupBy="p1">
+						<div property="id"></div>
+						<div property="p1"></div>
+						<br>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-groupBy>
+						<div>0</div>
+						<div>p1v1</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>1</div>
+						<div>p1v1</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>2</div>
+						<div>p1v2</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>3</div>
+						<div>p1v2</div>
+						<br>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection19">
+{
+	"simpleCollection": [
+		{
+			"id": 0,
+			"p1": "p1v1"
+		},
+		{
+			"id": 1,
+			"p1": "p1v1"
+		},
+		{
+			"id": 2,
+			"p1": "p1v2"
+		},
+		{
+			"id": 3,
+			"p1": "p1v2"
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="TODO: Non-existent property mv-groupBy">
+			<td mv-app mv-storage="#collection19">
+				<ul>
+					<li property="simpleCollection" mv-multiple mv-groupBy="p2">
+						<div property="id"></div>
+						<div property="p1"></div>
+						<br>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li mv-groupBy>
+						<div>0</div>
+						<div>p1v1</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>1</div>
+						<div>p1v1</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>2</div>
+						<div>p1v2</div>
+						<br>
+					</li>
+					<li mv-groupBy>
+						<div>3</div>
+						<div>p1v2</div>
+						<br>
+					</li>
+				</ul>
+			</td>
 		</tr>
 	</table>
 </section>
