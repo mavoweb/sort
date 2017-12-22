@@ -4,6 +4,8 @@
 
 var SORT_ATTR = "mv-sort";
 var GROUP_ATTR = "mv-groupBy";
+var INC_LIST = ["+"];
+var DEC_LIST = ["-"];
 
 Mavo.attributes.push(SORT_ATTR);
 Mavo.attributes.push(GROUP_ATTR);
@@ -130,13 +132,11 @@ Mavo.Functions.sort = function(array, ...properties) {
 				if (property.length === 0) {
 					continue;
 				}
-				var incList = ["+"];
-				var decList = ["-"];
 
-				if (incList.indexOf(property[0]) > -1) {
+				if (INC_LIST.indexOf(property[0]) > -1) {
 					inc = true;
 					property = property.substring(1);
-				} else if (decList.indexOf(property[0]) > -1) {
+				} else if (DEC_LIST.indexOf(property[0]) > -1) {
 					inc = false;
 					property = property.substring(1);
 				}
@@ -220,52 +220,63 @@ Mavo.Functions.sort = function(array, ...properties) {
 }
 
 /**
- * Takes an array of objects or Mavo Nodes, and returns a nested dictionary
- * grouping items based on the given properties
- * @param {Array} array - the array we want to group
- * @param {...string} properties - variable number of properties to use to group
- * the provided array.  Each property name provided will look for property
- * values of the items of the array that are the same, and group them together
- * in the returned dictionary.
+ * Creates a grouped structure of headings given an array representing a
+ * collection.  Each heading is represented by an object with an "id" property
+ * corresponding to the mavo property value, a "property" property correspnding
+ * to the mavo property name, and an "items" property corresponding to the
+ * subgroups or collection items in this group.
+ * @param {Array} array - array representing collection to group
+ * @param {...string} properties - properties to group by
  */
 Mavo.Functions.groupBy = function(array, ...properties) {
-	var output = {};
+	var output = [];
+	var indices = {};
 
 	var sorted = Mavo.Functions.sort(array, ...properties);
 
 	// TODO: What to do if too many groups
-
-	for (let item of array) {
+	for (let item of sorted) {
 		if (item instanceof Mavo.Node) {
 			item = item.getData();
 		}
 
-		// TODO: For now, skip property that doesn't exist in array item
-		var current = output;
+		var c_output = output;
+		var c_indices = indices;
 		var propVal = null;
 
 		for (let property of properties) {
-			if (item[property] !== undefined) {
-				if (propVal !== null) {
-					if (current[propVal] === undefined) {
-						current[propVal] = {};
-					}
-					current = current[propVal];
-				}
+			if (INC_LIST.indexOf(property[0]) > -1 ||
+			    DEC_LIST.indexOf(property[0]) > -1) {
+				property = property.substring(1);
+			}
 
+			// TODO: For now, skip property that doesn't exist in array item
+			if (item[property] !== undefined) {
 				propVal = item[property];
+				var i;
+				if (!(propVal in c_indices)) {
+					i = c_output.length;
+					c_output.push({
+						"id": propVal,
+						"property": property,
+						"items": []
+					});
+
+					c_indices[propVal] = {
+						"i": i,
+						"groups": {}
+					};
+				}
+				i = c_indices[propVal].i;
+				var group = c_output[i];
+				c_output = group.items;
+				c_indices = c_indices[propVal].groups;
 			}
 		}
 
 		if (propVal !== null) {
-			if (current[propVal] === undefined) {
-				current[propVal] = [];
-			}
-
-			current[propVal].push(item);
+			c_output.push(item);
 		}
-
-
 	}
 
 	return output;
@@ -276,7 +287,7 @@ Mavo.Functions.groupBy = function(array, ...properties) {
  * properties given in sortProperties. sortProperties can either be a space
  * separated string of property names, or an array of string property names.
  * @param {Mavo.Collection} collection - collection whose elements we want to sort
- * @param {Array | string} sortProperties - properties of the nodes in the
+ * @param {Array | string} properties - properties of the nodes in the
  * collection whose values we will use to compare for sorting
  */
 Mavo.Collection.sortDOM = function(collection, properties) {
