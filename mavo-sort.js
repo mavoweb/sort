@@ -77,11 +77,11 @@ Mavo.Functions.sort = function(array, ...properties) {
 		// If the elements in the array are Mavo nodes, sort by their data
 		if (prev instanceof Mavo.Node) {
 			prevNode = prev;
-			prev = prev.getData();
+			prev = prev.getData({live: true});
 		}
 		if (next instanceof Mavo.Node) {
 			nextNode = next;
-			next = next.getData();
+			next = next.getData({live: true});
 		}
 
 		// If it's an array of different types, we can't sort properly
@@ -132,7 +132,7 @@ Mavo.Functions.sort = function(array, ...properties) {
 							`${property.length}, arrays must be the same length`);
 				}
 				// Assume inc is true, since there's no means to specify otherwise
-				inc = true;
+				inc = false;
 				new_prev = property[prevData[1]];
 				new_next = property[nextData[1]];
 			} else {
@@ -145,8 +145,8 @@ Mavo.Functions.sort = function(array, ...properties) {
 					var new_next_node = nextNode.find(property);
 					if (new_prev_node !== undefined && new_next_node !== undefined) {
 						propFound = true;
-						new_prev = new_prev_node.getData();
-						new_next = new_next_node.getData();
+						new_prev = new_prev_node.getData({live: true});
+						new_next = new_next_node.getData({live: true});
 					}
 				}
 
@@ -161,7 +161,7 @@ Mavo.Functions.sort = function(array, ...properties) {
 					continue;
 				}
 				if (inc === undefined) {
-					inc = true;
+					inc = false;
 				}
 			}
 
