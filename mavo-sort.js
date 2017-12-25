@@ -15,10 +15,16 @@ Mavo.Plugins.register("sort", {
 		'node-render-end': function(env) {
 			if (env.context.nodeType == "Collection") {
 				var element = env.context.element;
+				var properties;
 				if (element) {
-					var sortProperties = element.getAttribute(SORT_ATTR);
-					if (sortProperties != null) {
-						Mavo.Collection.sortDOM(env.context, sortProperties);
+					properties = element.getAttribute(SORT_ATTR);
+					if (properties != null) {
+						Mavo.Collection.sortDOM(env.context, properties);
+					}
+
+					properties = element.getAttribute(GROUP_ATTR);
+					if (properties != null) {
+						Mavo.Collection.groupDOM(env.context, properties);
 					}
 				}
 			}
@@ -236,8 +242,10 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 
 	// TODO: What to do if too many groups
 	for (let item of sorted) {
+		var itemData = item;
 		if (item instanceof Mavo.Node) {
-			item = item.getData();
+			// TODO: live: true unless optgroup?
+			itemData = item.getData();
 		}
 
 		var c_output = output;
@@ -251,8 +259,8 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 			}
 
 			// TODO: For now, skip property that doesn't exist in array item
-			if (item[property] !== undefined) {
-				propVal = item[property];
+			if (itemData[property] !== undefined) {
+				propVal = itemData[property];
 				var i;
 				if (!(propVal in c_indices)) {
 					i = c_output.length;
@@ -284,8 +292,7 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 
 /**
  * Sorts the elements in the DOM corresponding to a collection based on the
- * properties given in sortProperties. sortProperties can either be a space
- * separated string of property names, or an array of string property names.
+ * properties given.
  * @param {Mavo.Collection} collection - collection whose elements we want to sort
  * @param {Array | string} properties - properties of the nodes in the
  * collection whose values we will use to compare for sorting
@@ -299,19 +306,48 @@ Mavo.Collection.sortDOM = function(collection, properties) {
 	var mavoNodes = collection.children;
 	if (properties.length > 0) {
 		mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
-	}
-	var fragment = document.createDocumentFragment();
-	for (let child of mavoNodes) {
-		fragment.appendChild(child.element);
-	}
-	if (collection.bottomUp) {
-		$.after(fragment, collection.marker);
-	} else {
-		$.before(fragment, collection.marker);
+
+		var fragment = document.createDocumentFragment();
+		for (let child of mavoNodes) {
+			fragment.appendChild(child.element);
+		}
+		if (collection.bottomUp) {
+			$.after(fragment, collection.marker);
+		} else {
+			$.before(fragment, collection.marker);
+		}
 	}
 }
 
+/**
+ * Groups the elements in the DOM corresponding to a collection based on the
+ * properties given.  Inserts header nodes between groups.
+ * @param {Mavo.Collection} collection - collection whose elements we want to
+ * group
+ * @param {Array | string} properties - properties of the nodes in the
+ * collection whose values we will use to compare for grouping
+ */
 Mavo.Collection.groupDOM = function(collection, properties) {
+	var createGroups = function(elem, items) {
+		for (var item of items) {
+			var isGroup = false;
+
+			// TODO: Get better condition
+			if (item.items !== undefined) {
+				isGroup = true;
+			}
+
+			// TODO: Start with select, expand for all cases
+			if (isGroup) {
+				var header = document.createElement("optgroup");
+				header.label = item.id;
+				elem.appendChild(header);
+				createGroups(header, item.items);
+			} else {
+				elem.appendChild(item.element);
+			}
+		}
+	}
 	if (typeof properties === "string") {
 		properties = properties.trim();
 		properties = properties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
@@ -320,11 +356,22 @@ Mavo.Collection.groupDOM = function(collection, properties) {
 	var mavoNodes = collection.children;
 	if (properties.length > 0) {
 		mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
-		var groupObj = Mavo.Functions.groupBy(mavoNodes, ...properties);
+		var groups = Mavo.Functions.groupBy(mavoNodes, ...properties);
+
+		var template = collection.templateElement;
+		var prev = template.previousSibling;
 
 		var fragment = document.createDocumentFragment();
 
+		if (template.tagName == "OPTION") {
+			createGroups(fragment, groups);
+		}
 
+		if (collection.bottomUp) {
+			$.after(fragment, collection.marker);
+		} else {
+			$.before(fragment, collection.marker);
+		}
 	}
 }
 

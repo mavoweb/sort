@@ -2297,6 +2297,16 @@ all Mavos</button>
 			])</td>
 		</tr>
 		
+		<tr title="Non-empty array non-existent property">
+			<td>groupBy([
+				{"id": 0, "p1": "p1v1"},
+				{"id": 1, "p1": "p1v1"},
+				{"id": 2, "p1": "p1v2"},
+				{"id": 3, "p1": "p1v2"}
+			], "+p2")</td>
+			<td>([])</td>
+		</tr>
+					
 		<tr title="Non-empty array one property reverse sort">
 			<td>groupBy([
 				{"id": 0, "p1": "p1v1"},
@@ -2478,7 +2488,7 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="TODO: Empty mv-groupBy">
+		<tr title="Empty mv-groupBy">
 			<td mv-app mv-storage="#collection16">
 				<ul>
 					<li property="simpleCollection" mv-multiple mv-groupBy>
@@ -2490,22 +2500,22 @@ all Mavos</button>
 			</td>
 			<td>
 				<ul>
-					<li mv-groupBy>
+					<li>
 						<div>0</div>
 						<div>p1v1</div>
 						<br>
 					</li>
-					<li mv-groupBy>
+					<li>
 						<div>1</div>
 						<div>p1v1</div>
 						<br>
 					</li>
-					<li mv-groupBy>
+					<li>
 						<div>2</div>
 						<div>p1v2</div>
 						<br>
 					</li>
-					<li mv-groupBy>
+					<li>
 						<div>3</div>
 						<div>p1v2</div>
 						<br>
@@ -2542,7 +2552,7 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="TODO: Empty string mv-groupBy">
+		<tr title="Empty string mv-groupBy">
 			<td mv-app mv-storage="#collection17">
 				<ul>
 					<li property="simpleCollection" mv-multiple mv-groupBy="">
@@ -2606,39 +2616,19 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="TODO: mv-groupBy single property mv-group-heading">
+		<tr title="Non-existent property mv-groupBy">
 			<td mv-app mv-storage="#collection18">
-				<ul>
-					<li property="simpleCollection" mv-multiple mv-groupBy="p1">
-						<div property="id"></div>
-						<div property="p1"></div>
-						<br>
-					</li>
-				</ul>
+				<select>
+					<option mv-multiple="simpleCollection" mv-groupBy="p2" mv-path="id"></option>
+				</select>
 			</td>
 			<td>
-				<ul>
-					<li mv-groupBy>
-						<div>0</div>
-						<div>p1v1</div>
-						<br>
-					</li>
-					<li mv-groupBy>
-						<div>1</div>
-						<div>p1v1</div>
-						<br>
-					</li>
-					<li mv-groupBy>
-						<div>2</div>
-						<div>p1v2</div>
-						<br>
-					</li>
-					<li mv-groupBy>
-						<div>3</div>
-						<div>p1v2</div>
-						<br>
-					</li>
-				</ul>
+				<select>
+					<option>0</option>
+					<option>1</option>
+					<option>2</option>
+					<option>3</option>
+				</select>
 			</td>
 		</tr>
 		<tr>
@@ -2670,39 +2660,30 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="TODO: Non-existent property mv-groupBy">
+		<tr title="mv-groupBy single property optgroup" data-test="selectMenuContent">
 			<td mv-app mv-storage="#collection19">
-				<ul>
-					<li property="simpleCollection" mv-multiple mv-groupBy="p2">
-						<div property="id"></div>
-						<div property="p1"></div>
-						<br>
-					</li>
-				</ul>
+				<select>
+					<option mv-multiple="simpleCollection" mv-groupBy="+p1" mv-path="id"></option>
+				</select>
 			</td>
 			<td>
-				<ul>
-					<li mv-groupBy>
-						<div>0</div>
-						<div>p1v1</div>
-						<br>
-					</li>
-					<li mv-groupBy>
-						<div>1</div>
-						<div>p1v1</div>
-						<br>
-					</li>
-					<li mv-groupBy>
-						<div>2</div>
-						<div>p1v2</div>
-						<br>
-					</li>
-					<li mv-groupBy>
-						<div>3</div>
-						<div>p1v2</div>
-						<br>
-					</li>
-				</ul>
+				<div class="mv-bar mv-ui">
+					<!--[>mv-status<]-->
+					<button class="mv-edit">Edit</button>
+					<button class="mv-save">Save</button>
+					<!--[>mv-login<]-->
+					<!--[>mv-logout<]-->
+				</div>
+				<select>
+					<optgroup label="p1v1"><!--
+						--><option>0</option><!--
+						--><option>1</option><!--
+					--></optgroup><!--
+					--><optgroup label="p1v2"><!--
+						--><option>2</option><!--
+						--><option>3</option><!--
+					--></optgroup>
+				</select>
 			</td>
 		</tr>
 	</table>
@@ -2776,6 +2757,21 @@ function expressionEvaluation(test, result, expected) {
     result.textContent = "ERROR";
     return false;
   }
+}
+function selectMenuContent(td, ref) {
+	var elements = $$("*", td);
+
+	return $$("*", ref).every((refElement, i) => {
+		var element = elements[i];
+		
+		var pass = element.nodeName == refElement.nodeName;
+		if (element.nodeName !== "SELECT") {
+			pass = pass & Test.content(element).trim() ==
+				Test.content(refElement).trim();
+		}
+		
+		return pass;
+	});
 }
 </script>
 </body>
