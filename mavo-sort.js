@@ -2,35 +2,39 @@
 
 (function($, $$) {
 
-Mavo.attributes.push("mv-sort");
+var SORT_ATTR = "mv-sort";
+var INC_LIST = ["+"];
+var DEC_LIST = ["-"];
+var INC_DEFAULT = false;
+
+Mavo.attributes.push(SORT_ATTR);
 
 Mavo.Plugins.register("sort", {
 	hooks: {
+		"init-end": function(root) {
+			if (root.element) {
+				var observer = new Mavo.Observer(root.element, SORT_ATTR, records => {
+					for (let record of records) {
+						var element = record.target;
+						var properties = element.getAttribute(SORT_ATTR);
+						if (properties != null) {
+							var collection = Mavo.Collection.get(element);
+							collection.sortDOM(properties);
+						}
+					}
+				}, {subtree: true});
+			}
+		},
 		'node-render-end': function(env) {
 			if (env.context.nodeType == "Collection") {
 				var element = env.context.element;
 				if (element) {
-					var sortProperties = element.getAttribute("mv-sort");
-					if (sortProperties != null) {
-						Mavo.Collection.sortDOM(env.context, sortProperties);
+					var properties = element.getAttribute(SORT_ATTR);
+					if (properties != null) {
+						var collection = env.context;
+						collection.sortDOM(properties);
 					}
 				}
-			}
-		},
-		'init-end': function(root) {
-			// TODO: Improve performance, will call sort for every element in the
-			// collection
-			if (root.element) {
-				var observer = new Mavo.Observer(root.element, "mv-sort", records => {
-					for (let record of records) {
-						var element = record.target;
-						var sortProperties = element.getAttribute("mv-sort");
-						if (sortProperties != null) {
-							var mavoCollection = Mavo.Collection.get(element);
-							Mavo.Collection.sortDOM(mavoCollection, sortProperties);
-						}
-					}
-				}, {subtree: true});
 			}
 		}
 	}
@@ -115,13 +119,11 @@ Mavo.Functions.sort = function(array, ...properties) {
 				if (property.length === 0) {
 					continue;
 				}
-				var incList = ["+"];
-				var decList = ["-"];
 
-				if (incList.indexOf(property[0]) > -1) {
+				if (INC_LIST.indexOf(property[0]) > -1) {
 					inc = true;
 					property = property.substring(1);
-				} else if (decList.indexOf(property[0]) > -1) {
+				} else if (DEC_LIST.indexOf(property[0]) > -1) {
 					inc = false;
 					property = property.substring(1);
 				}
@@ -131,8 +133,8 @@ Mavo.Functions.sort = function(array, ...properties) {
 							`${array.length} with array property of length ` +
 							`${property.length}, arrays must be the same length`);
 				}
-				// Assume inc is true, since there's no means to specify otherwise
-				inc = false;
+
+				inc = INC_DEFAULT;
 				new_prev = property[prevData[1]];
 				new_next = property[nextData[1]];
 			} else {
@@ -161,7 +163,7 @@ Mavo.Functions.sort = function(array, ...properties) {
 					continue;
 				}
 				if (inc === undefined) {
-					inc = false;
+					inc = INC_DEFAULT;
 				}
 			}
 
@@ -208,29 +210,91 @@ Mavo.Functions.sort = function(array, ...properties) {
  * Sorts the elements in the DOM corresponding to a collection based on the
  * properties given in sortProperties. sortProperties can either be a space
  * separated string of property names, or an array of string property names.
- * @param {Mavo.Collection} collection - collection whose elements we want to sort
- * @param {Array | string} sortProperties - properties of the nodes in the
+ * @param {Array | string} properties - properties of the nodes in the
  * collection whose values we will use to compare for sorting
  */
-Mavo.Collection.sortDOM = function(collection, sortProperties) {
-	if (typeof sortProperties === "string") {
-		sortProperties = sortProperties.trim();
-		sortProperties = sortProperties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
+Mavo.Collection.prototype.sortDOM = function(properties) {
+	properties = Mavo.Collection.formatSortCriteria(properties);
+	if (this.getSortCriteria() !== properties) {
+		this.setSortedBy(properties);
+		if (typeof properties === "string") {
+			properties = properties.trim();
+			properties = properties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
+		}
+
+		var mavoNodes = this.children;
+		if (properties.length > 0) {
+			mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
+		}
+		var fragment = document.createDocumentFragment();
+		for (let child of mavoNodes) {
+			fragment.appendChild(child.element);
+		}
+		if (this.bottomUp) {
+			$.after(fragment, this.marker);
+		} else {
+			$.before(fragment, this.marker);
+		}
+	}
+}
+
+
+/**
+ * Gets a unique array representing the given sorting criteria.
+ * @param {Array | string} properties - properties of the items in the
+ * collection whose values we will use to compare for sorting
+ * @returns {Array} array of strings with sorting properties
+ */
+Mavo.Collection.getFormattedProperties = function(properties) {
+	if (typeof properties === "string") {
+		properties = properties.trim();
+		properties = properties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
 	}
 
-	var mavoNodes = collection.children;
-	if (sortProperties.length > 0) {
-		mavoNodes = Mavo.Functions.sort(mavoNodes, ...sortProperties);
+	for (var property of properties) {
+		if (typeof property === "string") {
+			if (INC_LIST.indexOf(property[0]) === -1 &&
+			    DEC_LIST.indexOf(property[0])	=== -1) {
+				if (INC_DEFAULT) {
+					property = INC_LIST[0] + property;
+				} else {
+					property = DEC_LIST[0] + property;
+				}
+			}
+		}
 	}
-	var fragment = document.createDocumentFragment();
-	for (let child of mavoNodes) {
-		fragment.appendChild(child.element);
+
+	return properties;
+}
+
+/**
+ * Gets a unique string representing the given sorting criteria.
+ * @param {Array | string} properties - properties of the items in the
+ * collection whose values we will use to compare for sorting
+ * @returns {string} string representing sorting criteria
+ */
+Mavo.Collection.formatSortCriteria = function(properties) {
+	properties = Mavo.Collection.getFormattedProperties(properties);
+
+	return properties.join();
+}
+
+Mavo.Collection.prototype.setSortedBy = function(properties) {
+	this.sortedBy = Mavo.Collection.formatSortCriteria(properties);
+}
+
+/**
+ * Gets a unique string representing the sorting criteria applied to the given
+ * collection.  If the collection is unsorted, returns undefined.
+ * @returns {string | undefined} string representing sortin criteria
+ */
+Mavo.Collection.prototype.getSortCriteria = function() {
+	var properties = this.sortedBy;
+	if (this.sortedBy !== undefined) {
+		properties = Mavo.Collection.getFormattedProperties(properties);
 	}
-	if (collection.bottomUp) {
-		$.after(fragment, collection.marker);
-	} else {
-		$.before(fragment, collection.marker);
-	}
+
+	return properties;
 }
 
 })(Bliss, Bliss.$);
