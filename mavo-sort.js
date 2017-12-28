@@ -18,13 +18,16 @@ Mavo.Plugins.register("sort", {
 				var properties;
 				if (element) {
 					properties = element.getAttribute(SORT_ATTR);
+					var collection;
 					if (properties != null) {
-						Mavo.Collection.sortDOM(env.context, properties);
+						collection = env.context;
+						collection.sortDOM(properties);
 					}
 
 					properties = element.getAttribute(GROUP_ATTR);
 					if (properties != null) {
-						Mavo.Collection.groupDOM(env.context, properties);
+						collection = env.context;
+						collection.groupDOM(properties);
 					}
 				}
 			}
@@ -38,8 +41,8 @@ Mavo.Plugins.register("sort", {
 						var element = record.target;
 						var properties = element.getAttribute(SORT_ATTR);
 						if (properties != null) {
-							var mavoCollection = Mavo.Collection.get(element);
-							Mavo.Collection.sortDOM(mavoCollection, properties);
+							var collection = Mavo.Collection.get(element);
+							collection.sortDOM(properties);
 						}
 					}
 				}, {subtree: true});
@@ -49,8 +52,8 @@ Mavo.Plugins.register("sort", {
 						var element = record.target;
 						var properties = element.getAttribute(GROUP_ATTR);
 						if (properties != null) {
-							var mavoCollection = Mavo.Collection.get(element);
-							Mavo.Collection.groupDOM(mavoCollection, properties);
+							var collection = Mavo.Collection.get(element);
+							collection.groupDOM(properties);
 						}
 					}
 				}, {subtree: true});
@@ -297,13 +300,13 @@ Mavo.Functions.groupBy = function(array, ...properties) {
  * @param {Array | string} properties - properties of the nodes in the
  * collection whose values we will use to compare for sorting
  */
-Mavo.Collection.sortDOM = function(collection, properties) {
+Mavo.Collection.prototype.sortDOM = function(properties) {
 	if (typeof properties === "string") {
 		properties = properties.trim();
 		properties = properties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
 	}
 
-	var mavoNodes = collection.children;
+	var mavoNodes = this.children;
 	if (properties.length > 0) {
 		mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
 
@@ -311,10 +314,10 @@ Mavo.Collection.sortDOM = function(collection, properties) {
 		for (let child of mavoNodes) {
 			fragment.appendChild(child.element);
 		}
-		if (collection.bottomUp) {
-			$.after(fragment, collection.marker);
+		if (this.bottomUp) {
+			$.after(fragment, this.marker);
 		} else {
-			$.before(fragment, collection.marker);
+			$.before(fragment, this.marker);
 		}
 	}
 }
@@ -327,7 +330,7 @@ Mavo.Collection.sortDOM = function(collection, properties) {
  * @param {Array | string} properties - properties of the nodes in the
  * collection whose values we will use to compare for grouping
  */
-Mavo.Collection.groupDOM = function(collection, properties) {
+Mavo.Collection.prototype.groupDOM = function(properties) {
 	var createGroups = function(elem, items) {
 		for (var item of items) {
 			var isGroup = false;
@@ -353,12 +356,12 @@ Mavo.Collection.groupDOM = function(collection, properties) {
 		properties = properties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
 	}
 
-	var mavoNodes = collection.children;
+	var mavoNodes = this.children;
 	if (properties.length > 0) {
 		mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
 		var groups = Mavo.Functions.groupBy(mavoNodes, ...properties);
 
-		var template = collection.templateElement;
+		var template = this.templateElement;
 		var prev = template.previousSibling;
 
 		var fragment = document.createDocumentFragment();
@@ -367,10 +370,10 @@ Mavo.Collection.groupDOM = function(collection, properties) {
 			createGroups(fragment, groups);
 		}
 
-		if (collection.bottomUp) {
-			$.after(fragment, collection.marker);
+		if (this.bottomUp) {
+			$.after(fragment, this.marker);
 		} else {
-			$.before(fragment, collection.marker);
+			$.before(fragment, this.marker);
 		}
 	}
 }
