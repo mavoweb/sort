@@ -24,13 +24,29 @@ Mavo.Plugins.register("sort", {
 					}
 				}, {subtree: true});
 			}
+
+			root.element.addEventListener("mv-change", function(e) {
+				if (e.node.mode == "read" &&
+				    e.node.property !== null &&
+				    e.node.closestCollection !== null) {
+					var collection = e.node.closestCollection;
+					var properties = collection.element.getAttribute("mv-sort");
+					if (properties !== null) {
+						var noOrdProps = Mavo.Collection.getFormattedProperties(
+						                                 properties, false);
+						if (noOrdProps.indexOf(e.node.property) > -1) {
+							collection.sortDOM(properties);
+						}
+					}
+				}
+			});
 		},
 		'node-render-end': function(env) {
 			if (env.context.nodeType == "Collection") {
 				var element = env.context.element;
 				if (element) {
 					var properties = element.getAttribute(SORT_ATTR);
-					if (properties != null) {
+					if (properties !== null) {
 						var collection = env.context;
 						collection.sortDOM(properties);
 					}
@@ -243,23 +259,34 @@ Mavo.Collection.prototype.sortDOM = function(properties) {
  * Gets a unique array representing the given sorting criteria.
  * @param {Array | string} properties - properties of the items in the
  * collection whose values we will use to compare for sorting
+ * @param {boolen} keepOrder - whether or not to have symbol dictating order in
+ * front of property names
  * @returns {Array} array of strings with sorting properties
  */
-Mavo.Collection.getFormattedProperties = function(properties) {
+Mavo.Collection.getFormattedProperties = function(properties, keepOrder) {
+	if (keepOrder === undefined) {
+		keepOrder = true;
+	}
 	if (typeof properties === "string") {
 		properties = properties.trim();
 		properties = properties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
 	}
 
-	for (var property of properties) {
+	for (var i = 0; i < properties.length; i += 1) {
+		var property = properties[i];
 		if (typeof property === "string") {
-			if (INC_LIST.indexOf(property[0]) === -1 &&
-			    DEC_LIST.indexOf(property[0])	=== -1) {
-				if (INC_DEFAULT) {
-					property = INC_LIST[0] + property;
-				} else {
-					property = DEC_LIST[0] + property;
+			if (keepOrder) {
+				if (INC_LIST.indexOf(property[0]) === -1 &&
+						DEC_LIST.indexOf(property[0])	=== -1) {
+					if (INC_DEFAULT) {
+						properties[i] = INC_LIST[0] + property;
+					} else {
+						properties[i] = DEC_LIST[0] + property;
+					}
 				}
+			} else if (INC_LIST.indexOf(property[0]) > -1 ||
+			           DEC_LIST.indexOf(property[0])	> -1) {
+				properties[i] = property.substring(1);
 			}
 		}
 	}

@@ -2450,6 +2450,105 @@ all Mavos</button>
 				</ul>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<pre id="collection18">
+{
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 2
+				},
+				"prop22": 2
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -1
+				},
+				"prop22": 1
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 5
+				},
+				"prop22": 0
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 4
+				},
+				"prop22": 3
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 6
+				},
+				"prop22": 2
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+		</tr>
+		<tr title="Resort on mv-change">
+			<td mv-app mv-storage="#collection18">
+				<input id="c18cb" type="checkbox">
+				<ul>
+					<li property="deepGroup" mv-multiple mv-sort="prop22">
+						<div property="prop11">
+							<div property="prop12">
+								<div property="prop13"></div>
+							</div>
+							<div property="prop22" class="propVal"></div>
+						</div>
+					</li>
+				</ul>
+			</td>
+			<script>
+				$("#c18cb").addEventListener("click", function(e) {
+					$$(".propVal").forEach(function(elem) {
+						var val = parseInt(elem.innerHTML);
+						var node = Mavo.Node.get(elem);
+						node.value = -val;
+					});
+				});
+			</script>
+			<td>
+				<input type="checkbox">
+				<ul>
+					<li>
+						<div>5</div>
+						<div>0</div>
+					</li>
+					<li>
+						<div>-1</div>
+						<div>-1</div>
+					</li>
+					<li>
+						<div>2</div>
+						<div>-2</div>
+					</li>
+					<li>
+						<div>6</div>
+						<div>-2</div>
+					</li>
+					<li>
+						<div>4</div>
+						<div>-3</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
 	</table>
 </section>
 
