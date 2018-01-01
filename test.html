@@ -2504,7 +2504,7 @@ all Mavos</button>
 			<td mv-app mv-storage="#collection18">
 				<input id="c18cb" type="checkbox">
 				<ul>
-					<li property="deepGroup" mv-multiple mv-sort="prop22">
+					<li property="deepGroup" mv-multiple mv-sort="-prop22">
 						<div property="prop11">
 							<div property="prop12">
 								<div property="prop13"></div>
@@ -2545,6 +2545,92 @@ all Mavos</button>
 					<li>
 						<div>4</div>
 						<div>-3</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr title="Resort when mv-if visible">
+			<td>
+				<pre id="collection19">
+{
+	"simpleGroup": [
+		{
+			"prop1": "a",
+			"prop2": 2
+		},
+		{
+			"prop1": "b",
+			"prop2": 2
+		},
+		{
+			"prop1": "c",
+			"prop2": 1
+		},
+		{
+			"prop1": "d",
+			"prop2": 1
+		}
+	],
+	"show": false
+}
+				</pre>
+			</td>
+			<td>
+				<pre>
+{
+	"simpleGroup": [
+		{
+			"prop1": "a",
+			"prop2": 2
+		},
+		{
+			"prop1": "b",
+			"prop2": 2
+		},
+		{
+			"prop1": "c",
+			"prop2": 1
+		},
+		{
+			"prop1": "d",
+			"prop2": 1
+		}
+	],
+	"show": true
+}
+				</pre>
+			</td>
+		</tr>
+		<tr>
+			<td mv-app mv-storage="#collection19">
+				<input type="checkbox" property="show">
+				<ul mv-if="show">
+					<li property="simpleGroup"
+					    mv-multiple
+					    mv-sort="[if(show, '-prop1', '+prop1')]">
+						<div property="prop1"></div>
+						<div property="prop2"></div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<input type="checkbox" property="show">
+				<ul>
+					<li>
+						<div>d</div>
+						<div>1</div>
+					</li>
+					<li>
+						<div>c</div>
+						<div>1</div>
+					</li>
+					<li>
+						<div>b</div>
+						<div>2</div>
+					</li>
+					<li>
+						<div>a</div>
+						<div>2</div>
 					</li>
 				</ul>
 			</td>
