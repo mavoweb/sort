@@ -40,17 +40,18 @@ Mavo.Plugins.register("sort", {
 					}
 				}
 			});
+
+			root.element.addEventListener("mv-done", function(e) {
+				var node = e.node;
+				if (node.nodeType === "Collection") {
+					node.sortDOM();
+				}
+			});
 		},
 		'node-render-end': function(env) {
 			if (env.context.nodeType == "Collection") {
-				var element = env.context.element;
-				if (element) {
-					var properties = element.getAttribute(SORT_ATTR);
-					if (properties !== null) {
-						var collection = env.context;
-						collection.sortDOM(properties);
-					}
-				}
+				var collection = env.context;
+				collection.sortDOM();
 			}
 		}
 	}
@@ -223,33 +224,34 @@ Mavo.Functions.sort = function(array, ...properties) {
 }
 
 /**
- * Sorts the elements in the DOM corresponding to a collection based on the
- * properties given in sortProperties. sortProperties can either be a space
- * separated string of property names, or an array of string property names.
- * @param {Array | string} properties - properties of the nodes in the
- * collection whose values we will use to compare for sorting
+ * If the element associated with this collection has an mv-sort attribute,
+ * sorts the elements in the DOM corresponding to a collection based on the
+ * properties given in mv-sort.
  */
-Mavo.Collection.prototype.sortDOM = function(properties) {
-	properties = Mavo.Collection.formatSortCriteria(properties);
-	if (this.getSortCriteria() !== properties) {
-		this.setSortedBy(properties);
-		if (typeof properties === "string") {
-			properties = properties.trim();
-			properties = properties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
-		}
+Mavo.Collection.prototype.sortDOM = function() {
+	var properties = this.element.getAttribute("mv-sort");
+	if (properties !== null) {
+		properties = Mavo.Collection.formatSortCriteria(properties);
+		if (this.getSortCriteria() !== properties) {
+			this.setSortedBy(properties);
+			if (typeof properties === "string") {
+				properties = properties.trim();
+				properties = properties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
+			}
 
-		var mavoNodes = this.children;
-		if (properties.length > 0) {
-			mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
-		}
-		var fragment = document.createDocumentFragment();
-		for (let child of mavoNodes) {
-			fragment.appendChild(child.element);
-		}
-		if (this.bottomUp) {
-			$.after(fragment, this.marker);
-		} else {
-			$.before(fragment, this.marker);
+			var mavoNodes = this.children;
+			if (properties.length > 0) {
+				mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
+			}
+			var fragment = document.createDocumentFragment();
+			for (let child of mavoNodes) {
+				fragment.appendChild(child.element);
+			}
+			if (this.bottomUp) {
+				$.after(fragment, this.marker);
+			} else {
+				$.before(fragment, this.marker);
+			}
 		}
 	}
 }
@@ -301,7 +303,7 @@ Mavo.Collection.getFormattedProperties = function(properties, keepOrder) {
  * @returns {string} string representing sorting criteria
  */
 Mavo.Collection.formatSortCriteria = function(properties) {
-	properties = Mavo.Collection.getFormattedProperties(properties);
+	properties = Mavo.Collection.getFormattedProperties(properties, true);
 
 	return properties.join();
 }
