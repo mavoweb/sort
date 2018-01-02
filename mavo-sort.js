@@ -6,57 +6,64 @@ var SORT_ATTR = "mv-sort";
 var GROUP_ATTR = "mv-groupBy";
 var INC_LIST = ["+"];
 var DEC_LIST = ["-"];
+var INC_DEFAULT = false;
+var GROUP_HEADING = "mv-group-heading";
 
 Mavo.attributes.push(SORT_ATTR);
 Mavo.attributes.push(GROUP_ATTR);
 
 Mavo.Plugins.register("sort", {
 	hooks: {
-		'node-render-end': function(env) {
-			if (env.context.nodeType == "Collection") {
-				var element = env.context.element;
-				var properties;
-				if (element) {
-					properties = element.getAttribute(SORT_ATTR);
-					var collection;
-					if (properties != null) {
-						collection = env.context;
-						collection.sortDOM(properties);
+		"init-end": function(root) {
+			var observer;
+			if (root.element) {
+				observer = new Mavo.Observer(root.element, SORT_ATTR, records => {
+					for (let record of records) {
+						var element = record.target;
+						var collection = Mavo.Collection.get(element);
+						collection.sortDOM();
 					}
+				}, {subtree: true});
 
-					properties = element.getAttribute(GROUP_ATTR);
-					if (properties != null) {
-						collection = env.context;
-						collection.groupDOM(properties);
+				observer = new Mavo.Observer(root.element, GROUP_ATTR, records => {
+					for (let record of records) {
+						var element = record.target;
+						var collection = Mavo.Collection.get(element);
+						collection.groupDOM();
 					}
-				}
+				}, {subtree: true})
+
+				root.element.addEventListener("mv-change", function(e) {
+					if (e.node.mode == "read" &&
+							e.node.property !== null &&
+							e.node.closestCollection !== null) {
+						var collection = e.node.closestCollection;
+						var properties = collection.element.getAttribute(SORT_ATTR);
+						if (properties !== null) {
+							var noOrdProps = Mavo.Collection.getFormattedProperties(
+							                                 properties, false);
+							if (noOrdProps.indexOf(e.node.property) > -1) {
+								collection.sortDOM();
+								collection.groupDOM();
+							}
+						}
+					}
+				});
+
+				root.element.addEventListener("mv-done", function(e) {
+					var node = e.node;
+					if (node.nodeType === "Collection") {
+						node.sortDOM();
+						node.groupDOM();
+					}
+				});
 			}
 		},
-		'init-end': function(root) {
-			// TODO: Improve performance, will call sort for every element in the
-			// collection
-			if (root.element) {
-				var sortObserver = new Mavo.Observer(root.element, SORT_ATTR, records => {
-					for (let record of records) {
-						var element = record.target;
-						var properties = element.getAttribute(SORT_ATTR);
-						if (properties != null) {
-							var collection = Mavo.Collection.get(element);
-							collection.sortDOM(properties);
-						}
-					}
-				}, {subtree: true});
-
-				var groupObserver = new Mavo.Observer(root.element, GROUP_ATTR, records => {
-					for (let record of records) {
-						var element = record.target;
-						var properties = element.getAttribute(GROUP_ATTR);
-						if (properties != null) {
-							var collection = Mavo.Collection.get(element);
-							collection.groupDOM(properties);
-						}
-					}
-				}, {subtree: true});
+		'node-render-end': function(env) {
+			if (env.context.nodeType == "Collection") {
+				var collection = env.context;
+				collection.sortDOM();
+				collection.groupDOM();
 			}
 		}
 	}
@@ -103,11 +110,11 @@ Mavo.Functions.sort = function(array, ...properties) {
 		// If the elements in the array are Mavo nodes, sort by their data
 		if (prev instanceof Mavo.Node) {
 			prevNode = prev;
-			prev = prev.getData();
+			prev = prev.getData({live: true});
 		}
 		if (next instanceof Mavo.Node) {
 			nextNode = next;
-			next = next.getData();
+			next = next.getData({live: true});
 		}
 
 		// If it's an array of different types, we can't sort properly
@@ -152,11 +159,11 @@ Mavo.Functions.sort = function(array, ...properties) {
 			} else if (property instanceof Array) {
 				if (property.length !== array.length) {
 					throw new Error(`Attempting to sort array of length ` +
-							`${array.length} with array property of length ` +
-							`${property.length}, arrays must be the same length`);
+					                `${array.length} with array property of length ` +
+					                `${property.length}, arrays must be the same length`);
 				}
-				// Assume inc is true, since there's no means to specify otherwise
-				inc = false;
+
+				inc = INC_DEFAULT;
 				new_prev = property[prevData[1]];
 				new_next = property[nextData[1]];
 			} else {
@@ -169,8 +176,8 @@ Mavo.Functions.sort = function(array, ...properties) {
 					var new_next_node = nextNode.find(property);
 					if (new_prev_node !== undefined && new_next_node !== undefined) {
 						propFound = true;
-						new_prev = new_prev_node.getData();
-						new_next = new_next_node.getData();
+						new_prev = new_prev_node.getData({live: true});
+						new_next = new_next_node.getData({live: true});
 					}
 				}
 
@@ -185,7 +192,7 @@ Mavo.Functions.sort = function(array, ...properties) {
 					continue;
 				}
 				if (inc === undefined) {
-					inc = false;
+					inc = INC_DEFAULT;
 				}
 			}
 
@@ -294,30 +301,32 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 }
 
 /**
- * Sorts the elements in the DOM corresponding to a collection based on the
- * properties given.
- * @param {Mavo.Collection} collection - collection whose elements we want to sort
- * @param {Array | string} properties - properties of the nodes in the
- * collection whose values we will use to compare for sorting
+ * If the element associated with this collection has an mv-sort attribute,
+ * sorts the elements in the DOM corresponding to a collection based on the
+ * properties given in mv-sort.
  */
-Mavo.Collection.prototype.sortDOM = function(properties) {
-	if (typeof properties === "string") {
-		properties = properties.trim();
-		properties = properties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
-	}
+Mavo.Collection.prototype.sortDOM = function() {
+	var properties = this.element.getAttribute(SORT_ATTR);
+	if (properties !== null) {
+		properties = Mavo.Collection.formatSortCriteria(properties);
+		if (this.getSortCriteria() !== properties) {
+			this.setSortedBy(properties);
 
-	var mavoNodes = this.children;
-	if (properties.length > 0) {
-		mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
+			properties = Mavo.Collection.getFormattedProperties(properties, true);
 
-		var fragment = document.createDocumentFragment();
-		for (let child of mavoNodes) {
-			fragment.appendChild(child.element);
-		}
-		if (this.bottomUp) {
-			$.after(fragment, this.marker);
-		} else {
-			$.before(fragment, this.marker);
+			var mavoNodes = this.children;
+			if (properties.length > 0) {
+				mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
+			}
+			var fragment = document.createDocumentFragment();
+			for (let child of mavoNodes) {
+				fragment.appendChild(child.element);
+			}
+			if (this.bottomUp) {
+				$.after(fragment, this.marker);
+			} else {
+				$.before(fragment, this.marker);
+			}
 		}
 	}
 }
@@ -325,57 +334,123 @@ Mavo.Collection.prototype.sortDOM = function(properties) {
 /**
  * Groups the elements in the DOM corresponding to a collection based on the
  * properties given.  Inserts header nodes between groups.
- * @param {Mavo.Collection} collection - collection whose elements we want to
- * group
- * @param {Array | string} properties - properties of the nodes in the
- * collection whose values we will use to compare for grouping
  */
-Mavo.Collection.prototype.groupDOM = function(properties) {
-	var createGroups = function(elem, items) {
-		for (var item of items) {
-			var isGroup = false;
+Mavo.Collection.prototype.groupDOM = function() {
+	var properties = this.element.getAttribute(GROUP_ATTR);
+	if (properties !== null) {
+		var createGroups = function(elem, items) {
+			for (var item of items) {
+				var isGroup = false;
 
-			// TODO: Get better condition
-			if (item.items !== undefined) {
-				isGroup = true;
-			}
+				// TODO: Get better condition
+				if (item.items !== undefined) {
+					isGroup = true;
+				}
 
-			// TODO: Start with select, expand for all cases
-			if (isGroup) {
-				var header = document.createElement("optgroup");
-				header.label = item.id;
-				elem.appendChild(header);
-				createGroups(header, item.items);
-			} else {
-				elem.appendChild(item.element);
+				// TODO: Start with select, expand for all cases
+				if (isGroup) {
+					var header = document.createElement("optgroup");
+					header.label = item.id;
+					elem.appendChild(header);
+					createGroups(header, item.items);
+				} else {
+					elem.appendChild(item.element);
+				}
 			}
 		}
+
+		properties = Mavo.Collection.getFormattedProperties(properties, true);
+
+		if (properties.length > 0) {
+			var mavoNodes = this.children;
+			mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
+			var groups = Mavo.Functions.groupBy(mavoNodes, ...properties);
+
+			var template = this.templateElement;
+			var prev = template.previousSibling;
+
+			var fragment = document.createDocumentFragment();
+
+			if (template.tagName == "OPTION") {
+				createGroups(fragment, groups);
+			}
+
+			if (this.bottomUp) {
+				$.after(fragment, this.marker);
+			} else {
+				$.before(fragment, this.marker);
+			}
+		}
+	}
+}
+
+/**
+ * Gets a unique array representing the given sorting criteria.
+ * @param {Array | string} properties - properties of the items in the
+ * collection whose values we will use to compare for sorting
+ * @param {boolen} keepOrder - whether or not to have symbol dictating order in
+ * front of property names
+ * @returns {Array} array of strings with sorting properties
+ */
+Mavo.Collection.getFormattedProperties = function(properties, keepOrder) {
+	if (keepOrder === undefined) {
+		keepOrder = true;
 	}
 	if (typeof properties === "string") {
 		properties = properties.trim();
 		properties = properties.split(/\s*,\s*|\s+/).filter(val => val.length > 0);
 	}
 
-	var mavoNodes = this.children;
-	if (properties.length > 0) {
-		mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
-		var groups = Mavo.Functions.groupBy(mavoNodes, ...properties);
-
-		var template = this.templateElement;
-		var prev = template.previousSibling;
-
-		var fragment = document.createDocumentFragment();
-
-		if (template.tagName == "OPTION") {
-			createGroups(fragment, groups);
-		}
-
-		if (this.bottomUp) {
-			$.after(fragment, this.marker);
-		} else {
-			$.before(fragment, this.marker);
+	for (var i = 0; i < properties.length; i += 1) {
+		var property = properties[i];
+		if (typeof property === "string") {
+			if (keepOrder) {
+				if (INC_LIST.indexOf(property[0]) === -1 &&
+						DEC_LIST.indexOf(property[0])	=== -1) {
+					if (INC_DEFAULT) {
+						properties[i] = INC_LIST[0] + property;
+					} else {
+						properties[i] = DEC_LIST[0] + property;
+					}
+				}
+			} else if (INC_LIST.indexOf(property[0]) > -1 ||
+			           DEC_LIST.indexOf(property[0])	> -1) {
+				properties[i] = property.substring(1);
+			}
 		}
 	}
+
+	return properties;
+}
+
+/**
+ * Gets a unique string representing the given sorting criteria.
+ * @param {Array | string} properties - properties of the items in the
+ * collection whose values we will use to compare for sorting
+ * @returns {string} string representing sorting criteria
+ */
+Mavo.Collection.formatSortCriteria = function(properties) {
+	properties = Mavo.Collection.getFormattedProperties(properties, true);
+
+	return properties.join();
+}
+
+Mavo.Collection.prototype.setSortedBy = function(properties) {
+	this.sortedBy = Mavo.Collection.formatSortCriteria(properties);
+}
+
+/**
+ * Gets a unique string representing the sorting criteria applied to the given
+ * collection.  If the collection is unsorted, returns undefined.
+ * @returns {string | undefined} string representing sortin criteria
+ */
+Mavo.Collection.prototype.getSortCriteria = function() {
+	var properties = this.sortedBy;
+	if (this.sortedBy !== undefined) {
+		properties = Mavo.Collection.getFormattedProperties(properties);
+	}
+
+	return properties;
 }
 
 })(Bliss, Bliss.$);
