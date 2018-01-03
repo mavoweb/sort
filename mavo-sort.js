@@ -426,7 +426,7 @@ Mavo.Collection.prototype.sortDOM = function(properties) {
  */
 Mavo.Collection.prototype.groupDOM = function(properties) {
 	if (properties !== null) {
-		var createGroups = function(elem, items) {
+		var createGroups = function(elem, items, headerTemplate) {
 			for (var item of items) {
 				var isGroup = false;
 
@@ -435,12 +435,12 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 					isGroup = true;
 				}
 
-				// TODO: Start with select, expand for all cases
+				// TODO: Start with GROUP_HEADER, expand for all cases
 				if (isGroup) {
-					var header = document.createElement("optgroup");
-					header.label = item.id;
+					var header = headerTemplate.cloneNode(false);
+					header.textContent = item.id;
 					elem.appendChild(header);
-					createGroups(header, item.items);
+					createGroups(elem, item.items);
 				} else {
 					elem.appendChild(item.element);
 				}
@@ -454,19 +454,25 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 			mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
 			var groups = Mavo.Functions.groupBy(mavoNodes, ...properties);
 
-			var template = this.templateElement;
-			var prev = template.previousSibling;
-
 			var fragment = document.createDocumentFragment();
+			var element = this.element;
+			var prev = element.previousElementSibling;
 
-			if (template.tagName == "OPTION") {
-				createGroups(fragment, groups);
-			}
+			if (prev !== null) {
+				// TODO: Get headers for other cases (check .mv-group-header too)
+				//
+				// Look for mv-group-header element above
+				var selector = ` ${GROUP_HEADING} `;
+				var classes = (` ${prev.className} `).replace(/[\n\t\r]/g, " ");
+				if (classes.indexOf(selector) > -1) {
+					createGroups(fragment, groups, prev);
+				}
 
-			if (this.bottomUp) {
-				$.after(fragment, this.marker);
-			} else {
-				$.before(fragment, this.marker);
+				if (this.bottomUp) {
+					$.after(fragment, this.marker);
+				} else {
+					$.before(fragment, this.marker);
+				}
 			}
 		}
 	}

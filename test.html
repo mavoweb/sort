@@ -3069,6 +3069,93 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
+		<tr title="Single property decreasing order">
+			<td mv-app mv-storage="#collection23">
+				<b class="mv-group-heading"></b>
+				<div mv-multiple="simpleCollection" mv-groupBy="-p1">
+					<div property="id"></div>
+					<div property="p1"></div>
+				</div>
+			</td>
+			<td>
+				<b>p1v2</b>
+				<div>
+					<div>2</div>
+					<div>p1v2</div>
+				</div>
+				<div>
+					<div>3</div>
+					<div>p1v2</div>
+				</div>
+				<b>p1v1</b>
+				<div>
+					<div>0</div>
+					<div>p1v1</div>
+				</div>
+				<div>
+					<div>1</div>
+					<div>p1v1</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection24">
+{
+	"simpleCollection": [
+		{
+			"id": 0,
+			"p1": "p1v1"
+		},
+		{
+			"id": 1,
+			"p1": "p1v1"
+		},
+		{
+			"id": 2,
+			"p1": "p1v2"
+		},
+		{
+			"id": 3,
+			"p1": "p1v2"
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Single property decreasing order">
+			<td mv-app mv-storage="#collection24">
+				<b class="mv-group-heading"></b>
+				<div mv-multiple="simpleCollection" mv-groupBy="+p1">
+					<div property="id"></div>
+					<div property="p1"></div>
+				</div>
+			</td>
+			<td>
+				<b>p1v1</b>
+				<div>
+					<div>0</div>
+					<div>p1v1</div>
+				</div>
+				<div>
+					<div>1</div>
+					<div>p1v1</div>
+				</div>
+				<b>p1v2</b>
+				<div>
+					<div>2</div>
+					<div>p1v2</div>
+				</div>
+				<div>
+					<div>3</div>
+					<div>p1v2</div>
+				</div>
+			</td>
+		</tr>
 	</table>
 </section>
 
