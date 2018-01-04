@@ -2848,7 +2848,7 @@ all Mavos</button>
 	</table>
 </section>
 
-<h1>mv-groupBy tests</h1>
+<h1>mv-groupby tests</h1>
 
 <section>
 	<h1>Collection sort</h1>
@@ -2882,10 +2882,10 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="Empty mv-groupBy">
+		<tr title="Empty mv-groupby">
 			<td mv-app mv-storage="#collection20">
 				<ul>
-					<li property="simpleCollection" mv-multiple mv-groupBy>
+					<li property="simpleCollection" mv-multiple mv-groupby>
 						<div property="id"></div>
 						<div property="p1"></div>
 						<br>
@@ -2946,10 +2946,10 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="Empty string mv-groupBy">
+		<tr title="Empty string mv-groupby">
 			<td mv-app mv-storage="#collection21">
 				<ul>
-					<li property="simpleCollection" mv-multiple mv-groupBy="">
+					<li property="simpleCollection" mv-multiple mv-groupby="">
 						<div property="id"></div>
 						<div property="p1"></div>
 						<br>
@@ -2958,22 +2958,22 @@ all Mavos</button>
 			</td>
 			<td>
 				<ul>
-					<li mv-groupBy>
+					<li mv-groupby>
 						<div>0</div>
 						<div>p1v1</div>
 						<br>
 					</li>
-					<li mv-groupBy>
+					<li mv-groupby>
 						<div>1</div>
 						<div>p1v1</div>
 						<br>
 					</li>
-					<li mv-groupBy>
+					<li mv-groupby>
 						<div>2</div>
 						<div>p1v2</div>
 						<br>
 					</li>
-					<li mv-groupBy>
+					<li mv-groupby>
 						<div>3</div>
 						<div>p1v2</div>
 						<br>
@@ -3010,10 +3010,10 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="Non-existent property mv-groupBy">
+		<tr title="Non-existent property mv-groupby">
 			<td mv-app mv-storage="#collection22">
 				<ul>
-					<li mv-multiple="simpleCollection" mv-groupBy="p2">
+					<li mv-multiple="simpleCollection" mv-groupby="p2">
 						<div property="id"></div>
 						<div property="p1"></div>
 					</li>
@@ -3072,7 +3072,7 @@ all Mavos</button>
 		<tr title="Single property decreasing order">
 			<td mv-app mv-storage="#collection23">
 				<b class="mv-group-heading"></b>
-				<div mv-multiple="simpleCollection" mv-groupBy="-p1">
+				<div mv-multiple="simpleCollection" mv-groupby="-p1">
 					<div property="id"></div>
 					<div property="p1"></div>
 				</div>
@@ -3127,10 +3127,10 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="Single property decreasing order">
+		<tr title="Single property increasing order">
 			<td mv-app mv-storage="#collection24">
 				<b class="mv-group-heading"></b>
-				<div mv-multiple="simpleCollection" mv-groupBy="+p1">
+				<div mv-multiple="simpleCollection" mv-groupby="+p1">
 					<div property="id"></div>
 					<div property="p1"></div>
 				</div>
@@ -3153,6 +3153,80 @@ all Mavos</button>
 				<div>
 					<div>3</div>
 					<div>p1v2</div>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection25">
+{
+	"simpleCollection": [
+		{
+			"id": 0,
+			"p1": "p1v1",
+			"p2": "p2v1"
+		},
+		{
+			"id": 1,
+			"p1": "p1v1",
+			"p2": "p2v1"
+		},
+		{
+			"id": 2,
+			"p1": "p1v2",
+			"p2": "p2v2"
+		},
+		{
+			"id": 3,
+			"p1": "p1v2",
+			"p2": "p2v2"
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Updating grouping">
+			<td mv-app mv-storage="#collection25">
+				<div>
+					<input property="check" mv-storage="none" type="checkbox">
+				</div>
+				<b class="mv-group-heading"></b>
+				<div mv-multiple="simpleCollection" mv-groupby="[if(check, '+p2', '-p1')]">
+					<div property="id"></div>
+					<div property="p1"></div>
+					<div property="p2"></div>
+				</div>
+			</td>
+			<td>
+				<div>
+					<input type="checkbox">
+				</div>
+				<b></b>
+				<b>p2v1</b>
+				<div>
+					<div>0</div>
+					<div>p1v1</div>
+					<div>p2v1</div>
+				</div>
+				<div>
+					<div>1</div>
+					<div>p1v1</div>
+					<div>p2v1</div>
+				</div>
+				<b>p2v2</b>
+				<div>
+					<div>2</div>
+					<div>p1v2</div>
+					<div>p2v2</div>
+				</div>
+				<div>
+					<div>3</div>
+					<div>p1v2</div>
+					<div>p2v2</div>
 				</div>
 			</td>
 		</tr>

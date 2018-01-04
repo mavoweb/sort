@@ -3,7 +3,7 @@
 (function($, $$) {
 
 var SORT_ATTR = "mv-sort";
-var GROUP_ATTR = "mv-groupBy";
+var GROUP_ATTR = "mv-groupby";
 var INC_LIST = ["+"];
 var DEC_LIST = ["-"];
 var INC_DEFAULT = false;
@@ -13,7 +13,7 @@ var GROUP_HEADING = "mv-group-heading";
  * Gets a unique array representing the given sorting criteria.
  * @param {Array | string} properties - properties of the items in the
  * collection whose values we will use to compare for sorting
- * @param {boolen} keepOrder - whether or not to have symbol dictating order in
+ * @param {boolean} keepOrder - whether or not to have symbol dictating order in
  * front of property names
  * @returns {Array} array of strings with sorting properties
  */
@@ -420,13 +420,17 @@ Mavo.Collection.prototype.sortDOM = function(properties) {
 
 /**
  * Groups the elements in the DOM corresponding to a collection based on the
- * properties given.  Inserts header nodes between groups.
+ * properties given.  Inserts heading nodes between groups.
  * @param {Array | string} properties - properties of the nodes in the
  * collection whose values we will use to group
  */
 Mavo.Collection.prototype.groupDOM = function(properties) {
 	if (properties !== null) {
-		var createGroups = function(elem, items, headerTemplate) {
+		var createGroups = function(params) {
+			var elem = params.elem;
+			var items = params.items;
+			var headingTemplate = params.headingTemplate;
+			var collection = params.collection;
 			for (var item of items) {
 				var isGroup = false;
 
@@ -437,10 +441,19 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 
 				// TODO: Start with GROUP_HEADER, expand for all cases
 				if (isGroup) {
-					var header = headerTemplate.cloneNode(false);
-					header.textContent = item.id;
-					elem.appendChild(header);
-					createGroups(elem, item.items);
+					var heading = headingTemplate.cloneNode(false);
+					heading.textContent = item.id;
+					if (collection.headings === undefined) {
+						collection.headings = [];
+					}
+					collection.headings.push(heading);
+					elem.appendChild(heading);
+					createGroups({
+						elem,
+						headingTemplate,
+						collection,
+						items: item.items
+					});
 				} else {
 					elem.appendChild(item.element);
 				}
@@ -454,19 +467,30 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 			mavoNodes = Mavo.Functions.sort(mavoNodes, ...properties);
 			var groups = Mavo.Functions.groupBy(mavoNodes, ...properties);
 
-			var fragment = document.createDocumentFragment();
 			var element = this.element;
 			var prev = element.previousElementSibling;
+			var headingTemplate;
 
-			if (prev !== null) {
-				// TODO: Get headers for other cases (check .mv-group-header too)
-				//
-				// Look for mv-group-header element above
-				var selector = ` ${GROUP_HEADING} `;
-				var classes = (` ${prev.className} `).replace(/[\n\t\r]/g, " ");
-				if (classes.indexOf(selector) > -1) {
-					createGroups(fragment, groups, prev);
+			if (prev !== null && prev.classList.contains(GROUP_HEADING)) {
+				headingTemplate = prev;
+			}
+
+			if (headingTemplate) {
+				var fragment = document.createDocumentFragment();
+
+				if (this.headings !== undefined) {
+					for (var heading of this.headings) {
+						heading.remove();
+					}
+					this.headings = [];
 				}
+
+				createGroups({
+					elem: fragment,
+					items: groups,
+					headingTemplate: prev,
+					collection: this
+				});
 
 				if (this.bottomUp) {
 					$.after(fragment, this.marker);
