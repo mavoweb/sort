@@ -1612,7 +1612,7 @@ all Mavos</button>
 			<td>
 				<pre id="collection10">
 {
-	"nestedGroup": [
+	"nestedCollection": [
 		{
 			"prop11": 1,
 			"prop12": [
@@ -1651,10 +1651,10 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="Nested Groups">
+		<tr title="Nested Collections">
 			<td mv-app mv-storage="#collection10">
 				<ul>
-					<li property="nestedGroup" mv-multiple mv-sort="+prop11">
+					<li property="nestedCollection" mv-multiple mv-sort="+prop11">
 						<div property="prop11"></div>
 						<ul>
 							<li property="prop12" mv-multiple mv-sort="-"></li>
@@ -1701,7 +1701,7 @@ all Mavos</button>
 			<td>
 				<pre id="collection11">
 {
-	"nestedGroup": [
+	"nestedCollection": [
 		{
 			"prop11": 1,
 			"prop12": [
@@ -1740,14 +1740,14 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="Updating nested groups (check all boxes and click Save)" class="interactive">
+		<tr title="Updating nested collections (check all boxes and click Save)" class="interactive">
 			<td mv-app mv-storage="#collection11">
 				<div>
 					<input type="checkbox" mv-storage="none" property="check1">
 					<input type="checkbox" mv-storage="none" property="check2">
 				</div>
 				<ul>
-					<li property="nestedGroup" mv-multiple mv-sort="[if(check1, '+prop11')]">
+					<li property="nestedCollection" mv-multiple mv-sort="[if(check1, '+prop11')]">
 						<div property="prop11"></div>
 						<ul>
 							<li property="prop12" mv-multiple mv-sort="[if(check2, '-')]"></li>
@@ -3579,6 +3579,376 @@ all Mavos</button>
 							</div>
 							<div>abc</div>
 						</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection29">
+{
+	"nestedCollection": [
+		{
+			"prop11": "ab",
+			"prop12": [
+				{
+					"id": 0,
+					"prop121": "ba"
+				},
+				{
+					"id": 1,
+					"prop121": "bb"
+				},
+				{
+					"id": 2,
+					"prop121": "ba"
+				}
+			]
+		},
+		{
+			"prop11": "aa",
+			"prop12": [
+				{
+					"id": 0,
+					"prop121": "cb"
+				},
+				{
+					"id": 1,
+					"prop121": "ca"
+				},
+				{
+					"id": 2,
+					"prop121": "cb"
+				}
+			]
+		},
+		{
+			"prop11": "aa",
+			"prop12": [
+				{
+					"id": 0,
+					"prop121": "da"
+				},
+				{
+					"id": 1,
+					"prop121": "db"
+				},
+				{
+					"id": 2,
+					"prop121": "db"
+				}
+			]
+		},
+		{
+			"prop11": "ab",
+			"prop12": [
+				{
+					"id": 0,
+					"prop121": "ea"
+				},
+				{
+					"id": 1,
+					"prop121": "eb"
+				},
+				{
+					"id": 2,
+					"prop121": "ea"
+				}
+			]
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Nested Collections">
+			<td mv-app mv-storage="#collection29">
+				<ul>
+					<h5 class="mv-group-heading"></h6>
+					<li property="nestedCollection" mv-multiple mv-groupby="+prop11">
+						<div property="prop11"></div>
+						<ul>
+							<h6 class="mv-group-heading"></h6>
+							<li property="prop12" mv-multiple mv-groupby="-prop121">
+								<div property="id"></div>
+								<div property="prop121"></div>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<h5>aa</h5>
+					<li>
+						<div>aa</div>
+						<ul>
+							<h6>cb</h6>
+							<li>
+								<div>0</div>
+								<div>cb</div>
+							</li>
+							<li>
+								<div>2</div>
+								<div>cb</div>
+							</li>
+							<h6>ca</h6>
+							<li>
+								<div>1</div>
+								<div>ca</div>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<div>aa</div>
+						<ul>
+							<h6>db</h6>
+							<li>
+								<div>1</div>
+								<div>db</div>
+							</li>
+							<li>
+								<div>2</div>
+								<div>db</div>
+							</li>
+							<h6>da</h6>
+							<li>
+								<div>0</div>
+								<div>da</div>
+							</li>
+						</ul>
+					</li>
+					<h5>ab</h5>
+					<li>
+						<div>ab</div>
+						<ul>
+							<h6>bb</h6>
+							<li>
+								<div>1</div>
+								<div>bb</div>
+							</li>
+							<h6>ba</h6>
+							<li>
+								<div>0</div>
+								<div>ba</div>
+							</li>
+							<li>
+								<div>2</div>
+								<div>ba</div>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<div>ab</div>
+						<ul>
+							<h6>eb</h6>
+							<li>
+								<div>1</div>
+								<div>eb</div>
+							</li>
+							<h6>ea</h6>
+							<li>
+								<div>0</div>
+								<div>ea</div>
+							</li>
+							<li>
+								<div>2</div>
+								<div>ea</div>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection30">
+{
+	"nestedCollection": [
+		{
+			"prop11": "ab",
+			"prop12": [
+				{
+					"id": 0,
+					"prop121": "ba"
+				},
+				{
+					"id": 1,
+					"prop121": "bb"
+				},
+				{
+					"id": 2,
+					"prop121": "ba"
+				}
+			]
+		},
+		{
+			"prop11": "aa",
+			"prop12": [
+				{
+					"id": 0,
+					"prop121": "cb"
+				},
+				{
+					"id": 1,
+					"prop121": "ca"
+				},
+				{
+					"id": 2,
+					"prop121": "cb"
+				}
+			]
+		},
+		{
+			"prop11": "aa",
+			"prop12": [
+				{
+					"id": 0,
+					"prop121": "da"
+				},
+				{
+					"id": 1,
+					"prop121": "db"
+				},
+				{
+					"id": 2,
+					"prop121": "db"
+				}
+			]
+		},
+		{
+			"prop11": "ab",
+			"prop12": [
+				{
+					"id": 0,
+					"prop121": "ea"
+				},
+				{
+					"id": 1,
+					"prop121": "eb"
+				},
+				{
+					"id": 2,
+					"prop121": "ea"
+				}
+			]
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Updating nested collections (check all boxes and click Save)" class="interactive">
+			<td mv-app mv-storage="#collection30">
+				<div>
+					<input type="checkbox" mv-storage="none" property="check1">
+					<input type="checkbox" mv-storage="none" property="check2">
+				</div>
+				<ul>
+					<h5 class="mv-group-heading"></h6>
+					<li property="nestedCollection" mv-multiple mv-groupby="[if(check1,
+						'-prop11')]">
+						<div property="prop11"></div>
+						<ul>
+							<h6 class="mv-group-heading"></h6>
+							<li property="prop12" mv-multiple mv-groupby="[if(check2,
+								'+prop121')]">
+								<div property="id"></div>
+								<div property="prop121"></div>
+							</li>
+						</ul>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<div>
+					<input type="checkbox">
+					<input type="checkbox">
+				</div>
+				<ul>
+					<h5>ab</h5>
+					<li>
+						<div>ab</div>
+						<ul>
+							<h6>ba</h6>
+							<li>
+								<div>0</div>
+								<div>ba</div>
+							</li>
+							<li>
+								<div>2</div>
+								<div>ba</div>
+							</li>
+							<h6>bb</h6>
+							<li>
+								<div>1</div>
+								<div>bb</div>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<div>ab</div>
+						<ul>
+							<h6>ea</h6>
+							<li>
+								<div>0</div>
+								<div>ea</div>
+							</li>
+							<li>
+								<div>2</div>
+								<div>ea</div>
+							</li>
+							<h6>eb</h6>
+							<li>
+								<div>1</div>
+								<div>eb</div>
+							</li>
+						</ul>
+					</li>
+					<h5>aa</h5>
+					<li>
+						<div>aa</div>
+						<ul>
+							<h6>ca</h6>
+							<li>
+								<div>1</div>
+								<div>ca</div>
+							</li>
+							<h6>cb</h6>
+							<li>
+								<div>0</div>
+								<div>cb</div>
+							</li>
+							<li>
+								<div>2</div>
+								<div>cb</div>
+							</li>
+						</ul>
+					</li>
+					<li>
+						<div>aa</div>
+						<ul>
+							<h6>da</h6>
+							<li>
+								<div>0</div>
+								<div>da</div>
+							</li>
+							<h6>db</h6>
+							<li>
+								<div>1</div>
+								<div>db</div>
+							</li>
+							<li>
+								<div>2</div>
+								<div>db</div>
+							</li>
+						</ul>
 					</li>
 				</ul>
 			</td>
