@@ -8,6 +8,7 @@ var INC_LIST = ["+"];
 var DEC_LIST = ["-"];
 var INC_DEFAULT = false;
 var GROUP_HEADING = "mv-group-heading";
+var GROUP_SYMBOL = Symbol("isGroup");
 
 /**
  * Gets a unique array representing the given sorting criteria.
@@ -339,15 +340,16 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 
 	// TODO: What to do if too many groups
 	for (let item of sorted) {
-		var itemData = item;
+		var itemNode;
 		if (item instanceof Mavo.Node) {
 			// TODO: live: true unless optgroup?
-			itemData = item.getData();
+			itemNode = item;
+			item = item.getData({live: true});
 		}
 
 		var c_output = output;
 		var c_indices = indices;
-		var propVal = null;
+		var propVal;
 
 		for (let property of properties) {
 			if (INC_LIST.indexOf(property[0]) > -1 ||
@@ -355,16 +357,34 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 				property = property.substring(1);
 			}
 
-			// TODO: For now, skip property that doesn't exist in array item
-			if (itemData[property] !== undefined) {
-				propVal = itemData[property];
+			property = property.trim();
+			if (property.length === 0) {
+				continue;
+			}
+
+			var propFound = false;
+			if (itemNode !== undefined) {
+				var newItemNode = itemNode.find(property);
+				if (newItemNode !== undefined) {
+					propFound = true;
+					propVal = newItemNode.getData({live: true});
+				}
+			}
+
+			if (!propFound) {
+				var nestedList = property.split(".");
+				propVal = $.value(item, ...nestedList);
+			}
+
+			if (propVal !== undefined) {
 				var i;
 				if (!(propVal in c_indices)) {
 					i = c_output.length;
 					c_output.push({
 						"id": propVal,
 						"property": property,
-						"items": []
+						"items": [],
+						"isGroup": GROUP_SYMBOL
 					});
 
 					c_indices[propVal] = {
@@ -379,8 +399,12 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 			}
 		}
 
-		if (propVal !== null) {
-			c_output.push(item);
+		if (propVal !== undefined) {
+			if (itemNode === undefined) {
+				c_output.push(item);
+			} else {
+				c_output.push(itemNode);
+			}
 		}
 	}
 
@@ -434,8 +458,7 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 			for (var item of items) {
 				var isGroup = false;
 
-				// TODO: Get better condition
-				if (item.items !== undefined) {
+				if (item.isGroup === GROUP_SYMBOL) {
 					isGroup = true;
 				}
 
@@ -461,6 +484,9 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 		}
 
 		properties = getFormattedProperties(properties, true);
+		this.groupedBy = properties;
+
+		var fragment, heading;
 
 		if (properties.length > 0) {
 			var mavoNodes = this.children;
@@ -471,15 +497,19 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 			var prev = element.previousElementSibling;
 			var headingTemplate;
 
-			if (prev !== null && prev.classList.contains(GROUP_HEADING)) {
+			if (this.headingTemplate) {
+				headingTemplate = this.headingTemplate;
+			} else if (prev !== null && prev.classList.contains(GROUP_HEADING)) {
 				headingTemplate = prev;
+				this.headingTemplate = headingTemplate;
+				prev.remove();
 			}
 
 			if (headingTemplate) {
-				var fragment = document.createDocumentFragment();
+				fragment = document.createDocumentFragment();
 
 				if (this.headings !== undefined) {
-					for (var heading of this.headings) {
+					for (heading of this.headings) {
 						heading.remove();
 					}
 					this.headings = [];
@@ -488,7 +518,7 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 				createGroups({
 					elem: fragment,
 					items: groups,
-					headingTemplate: prev,
+					headingTemplate: headingTemplate,
 					collection: this
 				});
 
@@ -498,6 +528,25 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 					$.before(fragment, this.marker);
 				}
 			}
+		} else {
+			if (this.headings !== undefined) {
+				for (heading of this.headings) {
+					heading.remove();
+				}
+				this.headings = [];
+			}
+
+			fragment = document.createDocumentFragment();
+			for (var child of this.children) {
+				fragment.appendChild(child.element);
+			}
+
+			if (this.bottomUp) {
+				$.after(fragment, this.marker);
+			} else {
+				$.before(fragment, this.marker);
+			}
+
 		}
 	}
 }

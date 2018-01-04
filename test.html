@@ -3205,7 +3205,6 @@ all Mavos</button>
 				<div>
 					<input type="checkbox">
 				</div>
-				<b></b>
 				<b>p2v1</b>
 				<div>
 					<div>0</div>
@@ -3228,6 +3227,360 @@ all Mavos</button>
 					<div>p1v2</div>
 					<div>p2v2</div>
 				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection26">
+{
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 1
+				},
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -2
+				},
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 2
+				},
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 0
+				},
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -1
+				},
+				"prop22": "abc"
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Group by deep property (dot notation)">
+			<td mv-app mv-storage="#collection26">
+				<ul>
+					<b class="mv-group-heading"></b>
+					<li property="deepGroup" mv-multiple mv-groupby="+prop11.prop22">
+						<div property="prop11">
+							<div property="prop12">
+								<div property="prop13"></div>
+							</div>
+							<div property="prop22"></div>
+						</div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<b>abc</b>
+					<li>
+						<div>
+							<div>
+								<div>-2</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>0</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>-1</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+					<b>cba</b>
+					<li>
+						<div>
+							<div>
+								<span>1</span>
+							</div>
+							<div>cba</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<span>2</span>
+							</div>
+							<div>cba</div>
+						</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection27">
+{
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 1
+				},
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -2
+				},
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 2
+				},
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 0
+				},
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -1
+				},
+				"prop22": "abc"
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Group by deep property with update (dot notation)">
+			<td mv-app mv-storage="#collection27">
+				<div>
+					<input type="checkbox" mv-storage="none" property="check">
+				</div>
+				<ul>
+					<b class="mv-group-heading"></b>
+					<li property="deepGroup" mv-multiple mv-groupby="[if(check,
+						'-prop11.prop22')]">
+						<div property="prop11">
+							<div property="prop12">
+								<div property="prop13"></div>
+							</div>
+							<div property="prop22"></div>
+						</div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<div>
+					<input type="checkbox">
+				</div>
+				<ul>
+					<b>cba</b>
+					<li>
+						<div>
+							<div>
+								<span>1</span>
+							</div>
+							<div>cba</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<span>2</span>
+							</div>
+							<div>cba</div>
+						</div>
+					</li>
+					<b>abc</b>
+					<li>
+						<div>
+							<div>
+								<div>-2</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>0</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>-1</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection28">
+{
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 1
+				},
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -2
+				},
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 2
+				},
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 0
+				},
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -1
+				},
+				"prop22": "abc"
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Update from grouped to empty mv-groupby">
+			<td mv-app mv-storage="#collection28">
+				<div>
+					<input type="checkbox" mv-storage="none" property="check">
+				</div>
+				<ul>
+					<b class="mv-group-heading"></b>
+					<li property="deepGroup" mv-multiple mv-groupby="[if(!check,
+						'-prop11.prop22')]">
+						<div property="prop11">
+							<div property="prop12">
+								<div property="prop13"></div>
+							</div>
+							<div property="prop22"></div>
+						</div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<div>
+					<input type="checkbox">
+				</div>
+				<ul>
+					<li>
+						<div>
+							<div>
+								<span>1</span>
+							</div>
+							<div>cba</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>-2</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<span>2</span>
+							</div>
+							<div>cba</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>0</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>-1</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+				</ul>
 			</td>
 		</tr>
 	</table>
