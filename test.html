@@ -2690,7 +2690,7 @@ all Mavos</button>
 				}
 			])</td>
 		</tr>
-		
+
 		<tr title="Non-empty array non-existent property">
 			<td>groupBy([
 				{"id": 0, "p1": "p1v1"},
@@ -2700,7 +2700,7 @@ all Mavos</button>
 			], "+p2")</td>
 			<td>([])</td>
 		</tr>
-					
+
 		<tr title="Non-empty array one property reverse sort">
 			<td>groupBy([
 				{"id": 0, "p1": "p1v1"},
@@ -4249,6 +4249,201 @@ all Mavos</button>
 				</ul>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<pre id="collection33">
+{
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop22": "cba"
+			},
+			"prop12": 0
+		},
+		{
+			"prop11": {
+				"prop22": "abc"
+			},
+			"prop12": 1
+		},
+		{
+			"prop11": {
+				"prop22": "cba"
+			},
+			"prop12": 2
+		},
+		{
+			"prop11": {
+				"prop22": "abc"
+			},
+			"prop12": 3
+		},
+		{
+			"prop11": {
+				"prop22": "abc"
+			},
+			"prop12": 4
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Referencing property with mv-path">
+			<td mv-app mv-storage="#collection33">
+				<ul>
+					<b class="mv-group-heading"></b>
+					<li property="deepGroup" mv-multiple mv-groupby="+prop11">
+						<div property="prop12"></div>
+						<div property="prop11" mv-path="prop22"></div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<b>abc</b>
+					<li>
+						<div>1</div>
+						<div>abc</div>
+					</li>
+					<li>
+						<div>3</div>
+						<div>abc</div>
+					</li>
+					<li>
+						<div>4</div>
+						<div>abc</div>
+					</li>
+					<b>cba</b>
+					<li>
+						<div>0</div>
+						<div>cba</div>
+					</li>
+					<li>
+						<div>2</div>
+						<div>cba</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection34">
+{
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop22": "cba"
+			},
+			"prop12": 0
+		},
+		{
+			"prop11": {
+				"prop22": "abc"
+			},
+			"prop12": 1
+		},
+		{
+			"prop11": {
+				"prop22": "cba"
+			},
+			"prop12": 2
+		},
+		{
+			"prop11": {
+				"prop22": "abc"
+			},
+			"prop12": 3
+		},
+		{
+			"prop11": {
+				"prop22": "abc"
+			},
+			"prop12": 4
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<pre>
+{
+	"deepGroup": [
+		{
+			"prop12": 0,
+			"newProp": {
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop12":
+			"newProp": {
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop12": 2,
+			"newProp": {
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop12": 3,
+			"newProp": {
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop12": 4,
+			"newProp": {
+				"prop22": "abc"
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+		</tr>
+		<tr title="Referencing property with mv-alias and mv-path">
+			<td mv-app mv-storage="#collection34">
+				<ul>
+					<b class="mv-group-heading"></b>
+					<li property="deepGroup" mv-multiple mv-groupby="+newProp">
+						<div property="prop12"></div>
+						<div property="newProp" mv-alias="prop11" mv-path="prop22"></div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<b>abc</b>
+					<li>
+						<div>1</div>
+						<div>abc</div>
+					</li>
+					<li>
+						<div>3</div>
+						<div>abc</div>
+					</li>
+					<li>
+						<div>4</div>
+						<div>abc</div>
+					</li>
+					<b>cba</b>
+					<li>
+						<div>0</div>
+						<div>cba</div>
+					</li>
+					<li>
+						<div>2</div>
+						<div>cba</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
 	</table>
 </section>
 
@@ -4328,13 +4523,13 @@ function selectMenuContent(td, ref) {
 
 	return $$("*", ref).every((refElement, i) => {
 		var element = elements[i];
-		
+
 		var pass = element.nodeName == refElement.nodeName;
 		if (element.nodeName !== "SELECT") {
 			pass = pass & Test.content(element).trim() ==
 				Test.content(refElement).trim();
 		}
-		
+
 		return pass;
 	});
 }
