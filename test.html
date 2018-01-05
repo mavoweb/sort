@@ -4520,9 +4520,9 @@ all Mavos</button>
 }
 			</td>
 		</tr>
-		<tr title="Resort on mv-change">
-			<td id="test34" mv-app mv-storage="#collection35">
-				<input id="c34cb" type="checkbox">
+		<tr title="Regroup on mv-change">
+			<td id="test35" mv-app mv-storage="#collection35">
+				<input id="c35cb" type="checkbox">
 				<ul>
 					<b class="mv-group-heading"></b>
 					<li property="deepGroup" mv-multiple mv-groupby="-prop12">
@@ -4534,8 +4534,8 @@ all Mavos</button>
 				</ul>
 			</td>
 			<script>
-				$("#c34cb").addEventListener("click", function(e) {
-					$$("#test34 .propVal").forEach(function(elem) {
+				$("#c35cb").addEventListener("click", function(e) {
+					$$("#test35 .propVal").forEach(function(elem) {
 						var val = elem.innerHTML;
 						var node = Mavo.Node.get(elem);
 						node.value = val.split("").reverse().join("");
@@ -4575,6 +4575,95 @@ all Mavos</button>
 						<div>
 							<div>abc</div>
 						</div>
+						<div>2</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr title="Regroup when mv-if visible">
+			<td>
+				<pre id="collection36">
+{
+	"simpleGroup": [
+		{
+			"prop1": "head1",
+			"prop2": 0
+		},
+		{
+			"prop1": "head2",
+			"prop2": 1
+		},
+		{
+			"prop1": "head1",
+			"prop2": 2
+		},
+		{
+			"prop1": "head2",
+			"prop2": 3
+		}
+	],
+	"show": false
+}
+				</pre>
+			</td>
+			<td>
+				<pre>
+{
+	"simpleGroup": [
+		{
+			"prop1": "head1",
+			"prop2": 0
+		},
+		{
+			"prop1": "head2",
+			"prop2": 1
+		},
+		{
+			"prop1": "head1",
+			"prop2": 2
+		},
+		{
+			"prop1": "head2",
+			"prop2": 3
+		}
+	],
+	"show": true
+}
+				</pre>
+			</td>
+		</tr>
+		<tr>
+			<td mv-app mv-storage="#collection36">
+				<input type="checkbox" property="show">
+				<ul mv-if="show">
+					<b class="mv-group-heading"></b>
+					<li property="simpleGroup"
+					    mv-multiple
+					    mv-groupby="[if(show, '-prop1', '+prop1')]">
+						<div property="prop1"></div>
+						<div property="prop2"></div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<input type="checkbox">
+				<ul>
+					<b>head2</b>
+					<li>
+						<div>head2</div>
+						<div>1</div>
+					</li>
+					<li>
+						<div>head2</div>
+						<div>3</div>
+					</li>
+					<b>head1</b>
+					<li>
+						<div>head1</div>
+						<div>0</div>
+					</li>
+					<li>
+						<div>head1</div>
 						<div>2</div>
 					</li>
 				</ul>

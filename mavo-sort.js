@@ -398,7 +398,7 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 				}
 			}
 
-			if (propVal !== undefined) {
+			if (propVal !== undefined && propVal !== null) {
 				var i;
 				if (!(propVal in c_indices)) {
 					i = c_output.length;
@@ -424,7 +424,7 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 			}
 		}
 
-		if (propVal !== undefined) {
+		if (propVal !== undefined && propVal !== null) {
 			c_output.push(item);
 		}
 	}
@@ -471,6 +471,9 @@ Mavo.Collection.prototype.sortDOM = function(properties) {
  */
 Mavo.Collection.prototype.groupDOM = function(properties) {
 	if (properties !== null) {
+		properties = getFormattedProperties(properties, true);
+		this.groupedBy = formatSortCriteria(properties);
+
 		var createGroups = function(params) {
 			var elem = params.elem;
 			var items = params.items;
@@ -506,9 +509,6 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 				}
 			}
 		}
-
-		properties = getFormattedProperties(properties, true);
-		this.groupedBy = formatSortCriteria(properties);
 
 		var fragment, heading;
 
