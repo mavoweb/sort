@@ -3517,8 +3517,130 @@ all Mavos</button>
 				<script>document.write($$("td pre").pop().outerHTML)</script>
 			</td>
 		</tr>
-		<tr title="Update from grouped to empty mv-groupby">
+		<tr title="Updating a deep property by just its property name (no dot
+			notation)">
 			<td mv-app mv-storage="#collection28">
+				<div>
+					<input type="checkbox" mv-storage="none" property="check">
+				</div>
+				<ul>
+					<b class="mv-group-heading"></b>
+					<li property="deepGroup" mv-multiple mv-groupby="[if(check,
+						'-prop22')]">
+						<div property="prop11">
+							<div property="prop12">
+								<div property="prop13"></div>
+							</div>
+							<div property="prop22"></div>
+						</div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<div>
+					<input type="checkbox">
+				</div>
+				<ul>
+					<b>cba</b>
+					<li>
+						<div>
+							<div>
+								<span>1</span>
+							</div>
+							<div>cba</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<span>2</span>
+							</div>
+							<div>cba</div>
+						</div>
+					</li>
+					<b>abc</b>
+					<li>
+						<div>
+							<div>
+								<div>-2</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>0</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>-1</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection29">
+{
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 1
+				},
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -2
+				},
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 2
+				},
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 0
+				},
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -1
+				},
+				"prop22": "abc"
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Update from grouped to empty mv-groupby">
+			<td mv-app mv-storage="#collection29">
 				<div>
 					<input type="checkbox" mv-storage="none" property="check">
 				</div>
@@ -3585,7 +3707,7 @@ all Mavos</button>
 		</tr>
 		<tr>
 			<td>
-				<pre id="collection29">
+				<pre id="collection30">
 {
 	"nestedCollection": [
 		{
@@ -3665,7 +3787,7 @@ all Mavos</button>
 			</td>
 		</tr>
 		<tr title="Nested Collections">
-			<td mv-app mv-storage="#collection29">
+			<td mv-app mv-storage="#collection30">
 				<ul>
 					<h5 class="mv-group-heading"></h6>
 					<li property="nestedCollection" mv-multiple mv-groupby="+prop11">
@@ -3765,7 +3887,7 @@ all Mavos</button>
 		</tr>
 		<tr>
 			<td>
-				<pre id="collection30">
+				<pre id="collection31">
 {
 	"nestedCollection": [
 		{
@@ -3845,7 +3967,7 @@ all Mavos</button>
 			</td>
 		</tr>
 		<tr title="Updating nested collections (check all boxes and click Save)" class="interactive">
-			<td mv-app mv-storage="#collection30">
+			<td mv-app mv-storage="#collection31">
 				<div>
 					<input type="checkbox" mv-storage="none" property="check1">
 					<input type="checkbox" mv-storage="none" property="check2">
@@ -3953,6 +4075,180 @@ all Mavos</button>
 				</ul>
 			</td>
 		</tr>
+		<tr>
+			<td>
+				<pre id="collection32">
+{
+	"deepGroup": [
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 1
+				},
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -2
+				},
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 2
+				},
+				"prop22": "cba"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": 0
+				},
+				"prop22": "abc"
+			}
+		},
+		{
+			"prop11": {
+				"prop12": {
+					"prop13": -1
+				},
+				"prop22": "abc"
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+				<script>document.write($$("td pre").pop().outerHTML)</script>
+			</td>
+		</tr>
+		<tr title="Ungrouped collection and grouped collection referenced with
+			mv-value (passing collection itself as argument)">
+			<td mv-app mv-storage="#collection32">
+				<ul>
+					<li property="deepGroup" mv-multiple>
+						<div property="prop11">
+							<div property="prop12">
+								<div property="prop13"></div>
+							</div>
+							<div property="prop22"></div>
+						</div>
+					</li>
+				</ul>
+				<ul>
+					<li property="deepGroup2" mv-multiple mv-value="groupBy(deepGroup,
+						prop22)">
+						<div property="id"></div>
+						<div property="items" mv-multiple>
+							<div property="prop11">
+								<div property="prop12">
+									<div property="prop13"></div>
+								</div>
+								<div>[prop22]</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</td>
+			<td>
+				<ul>
+					<li>
+						<div>
+							<div>
+								<div>1</div>
+							</div>
+							<div>cba</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>-2</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>2</div>
+							</div>
+							<div>cba</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>0</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+					<li>
+						<div>
+							<div>
+								<div>-1</div>
+							</div>
+							<div>abc</div>
+						</div>
+					</li>
+				</ul>
+				<ul>
+					<li>
+						<div>cba</div>
+						<div>
+							<div>
+								<div>
+									<div>1</div>
+								</div>
+								<div>cba</div>
+							</div>
+						</div>
+						<div>
+							<div>
+								<div>
+									<div>2</div>
+								</div>
+								<div>cba</div>
+							</div>
+						</div>
+					</li>
+					<li>
+						<div>abc</div>
+						<div>
+							<div>
+								<div>
+									<div>-2</div>
+								</div>
+								<div>abc</div>
+							</div>
+						</div>
+						<div>
+							<div>
+								<div>
+									<div>0</div>
+								</div>
+								<div>abc</div>
+							</div>
+						</div>
+						<div>
+							<div>
+								<div>
+									<div>-1</div>
+								</div>
+								<div>abc</div>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
 	</table>
 </section>
 
@@ -3999,7 +4295,9 @@ function expressionEvaluation(test, result, expected) {
 				expected.textContent = getObjectArrayString(ev(expectedTextContent));
 			}
 
-			return Test.equals(JSON.stringify(r), JSON.stringify(ev(expected.textContent)));
+			var e_r = ev(expected.textContent);
+			return Test.equals(JSON.stringify(r, Object.keys(r).sort()),
+			                   JSON.stringify(e_r, Object.keys(e_r).sort()));
 		} else {
 			function undefinedString(k, v) {
 				if (v === undefined) {
@@ -4013,8 +4311,8 @@ function expressionEvaluation(test, result, expected) {
 			var exVal = ev(expected.textContent);
 			var acVal = ev(result.textContent);
 			if (exVal instanceof Object && acVal instanceof Object) {
-				exVal = JSON.stringify(exVal);
-				acVal = JSON.stringify(acVal);
+				exVal = JSON.stringify(exVal, Object.keys(exVal).sort());
+				acVal = JSON.stringify(acVal, Object.keys(acVal).sort());
 			}
 			return Test.equals(exVal, acVal);
 		}

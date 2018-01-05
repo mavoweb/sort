@@ -246,9 +246,7 @@ Mavo.Functions.sort = function(array, ...properties) {
 				}
 			} else if (property instanceof Array) {
 				if (property.length !== array.length) {
-					throw new Error(`Attempting to sort array of length ` +
-					                `${array.length} with array property of length ` +
-					                `${property.length}, arrays must be the same length`);
+					continue;
 				}
 
 				inc = INC_DEFAULT;
@@ -345,6 +343,11 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 			// TODO: live: true unless optgroup?
 			itemNode = item;
 			item = item.getData({live: true});
+		} else {
+			itemNode = item[Mavo.toNode];
+			if (itemNode !== undefined) {
+				item = itemNode.getData({live: true});
+			}
 		}
 
 		var c_output = output;
@@ -352,40 +355,62 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 		var propVal;
 
 		for (let property of properties) {
-			if (INC_LIST.indexOf(property[0]) > -1 ||
-			    DEC_LIST.indexOf(property[0]) > -1) {
-				property = property.substring(1);
-			}
-
-			property = property.trim();
-			if (property.length === 0) {
-				continue;
-			}
-
-			var propFound = false;
-			if (itemNode !== undefined) {
-				var newItemNode = itemNode.find(property);
-				if (newItemNode !== undefined) {
-					propFound = true;
-					propVal = newItemNode.getData({live: true});
+			if (typeof property === "string") {
+				if (INC_LIST.indexOf(property[0]) > -1 ||
+						DEC_LIST.indexOf(property[0]) > -1) {
+					property = property.substring(1);
 				}
-			}
 
-			if (!propFound) {
-				var nestedList = property.split(".");
-				propVal = $.value(item, ...nestedList);
+				property = property.trim();
+				if (property.length === 0) {
+					continue;
+				}
+
+				var propFound = false;
+				if (itemNode !== undefined) {
+					var newItemNode = itemNode.find(property);
+					if (newItemNode !== undefined) {
+						propFound = true;
+						propVal = newItemNode.getData({live: true});
+					}
+				}
+
+				if (!propFound) {
+					var nestedList = property.split(".");
+					propVal = $.value(item, ...nestedList);
+				}
+			} else if (property instanceof Array) {
+				if (property.length !== array.length) {
+					continue;
+				}
+
+				var index;
+				if (itemNode !== undefined) {
+					index = itemNode.index;
+				}
+				if (index !== undefined) {
+					propVal = property[index];
+					var node = property[Mavo.toNode];
+					property = undefined;
+					if (node !== undefined) {
+						property = node.property;
+					}
+				}
 			}
 
 			if (propVal !== undefined) {
 				var i;
 				if (!(propVal in c_indices)) {
 					i = c_output.length;
-					c_output.push({
+					var params = {
 						"id": propVal,
-						"property": property,
 						"items": [],
 						"isGroup": GROUP_SYMBOL
-					});
+					}
+					if (property !== undefined) {
+						params.property = property;
+					}
+					c_output.push(params);
 
 					c_indices[propVal] = {
 						"i": i,
@@ -400,11 +425,7 @@ Mavo.Functions.groupBy = function(array, ...properties) {
 		}
 
 		if (propVal !== undefined) {
-			if (itemNode === undefined) {
-				c_output.push(item);
-			} else {
-				c_output.push(itemNode);
-			}
+			c_output.push(item);
 		}
 	}
 
@@ -478,13 +499,16 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 						items: item.items
 					});
 				} else {
+					if (item[Mavo.toNode]) {
+						item = item[Mavo.toNode];
+					}
 					elem.appendChild(item.element);
 				}
 			}
 		}
 
 		properties = getFormattedProperties(properties, true);
-		this.groupedBy = properties;
+		this.groupedBy = formatSortCriteria(properties);
 
 		var fragment, heading;
 
