@@ -1,4 +1,5 @@
 /* global Bliss, Mavo */
+/* eslint no-bitwise: "off" */
 
 (function($, $$) {
 
@@ -519,7 +520,7 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 
 			var element = this.element;
 			var prev = element.previousElementSibling;
-			var headingTemplate;
+			var headingTemplate = document.createElement("h1");
 
 			if (this.headingTemplate) {
 				headingTemplate = this.headingTemplate;
@@ -527,30 +528,49 @@ Mavo.Collection.prototype.groupDOM = function(properties) {
 				headingTemplate = prev;
 				this.headingTemplate = headingTemplate;
 				prev.remove();
+			} else {
+				var docHeadings = $$("h1, h2, h3, h4, h5, h6", this.mavo.root.element);
+				docHeadings.reverse();
+				if (docHeadings.length > 0) {
+					for (var docHeading of docHeadings) {
+						if (docHeading.compareDocumentPosition(element) &
+						    Node.DOCUMENT_POSITION_FOLLOWING) {
+							var headingNum = parseInt(docHeading.tagName[1], 10);
+							var ariaLevel = parseInt(docHeading.getAttribute("aria-level"), 10);
+							headingNum = Math.min(6, headingNum + 1);
+							headingTemplate = document.createElement(`h${headingNum}`);
+							if (!isNaN(ariaLevel)) {
+								ariaLevel += 1;
+								headingTemplate.setAttribute("aria-level", ariaLevel);
+							}
+							break;
+						}
+					}
+				}
 			}
 
-			if (headingTemplate) {
-				fragment = document.createDocumentFragment();
+			headingTemplate.classList.add(GROUP_HEADING, "mv-ui");
 
-				if (this.headings !== undefined) {
-					for (heading of this.headings) {
-						heading.remove();
-					}
-					this.headings = [];
+			fragment = document.createDocumentFragment();
+
+			if (this.headings !== undefined) {
+				for (heading of this.headings) {
+					heading.remove();
 				}
+				this.headings = [];
+			}
 
-				createGroups({
-					elem: fragment,
-					items: groups,
-					headingTemplate: headingTemplate,
-					collection: this
-				});
+			createGroups({
+				elem: fragment,
+				items: groups,
+				headingTemplate: headingTemplate,
+				collection: this
+			});
 
-				if (this.bottomUp) {
-					$.after(fragment, this.marker);
-				} else {
-					$.before(fragment, this.marker);
-				}
+			if (this.bottomUp) {
+				$.after(fragment, this.marker);
+			} else {
+				$.before(fragment, this.marker);
 			}
 		} else {
 			if (this.headings !== undefined) {
