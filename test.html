@@ -2501,7 +2501,7 @@ all Mavos</button>
 			</td>
 		</tr>
 		<tr title="Resort on mv-change">
-			<td mv-app mv-storage="#collection18">
+			<td id="test18" mv-app mv-storage="#collection18">
 				<input id="c18cb" type="checkbox">
 				<ul>
 					<li property="deepGroup" mv-multiple mv-sort="-prop22">
@@ -2516,7 +2516,7 @@ all Mavos</button>
 			</td>
 			<script>
 				$("#c18cb").addEventListener("click", function(e) {
-					$$(".propVal").forEach(function(elem) {
+					$$("#test18 .propVal").forEach(function(elem) {
 						var val = parseInt(elem.innerHTML);
 						var node = Mavo.Node.get(elem);
 						node.value = -val;
@@ -4336,33 +4336,33 @@ all Mavos</button>
 	"deepGroup": [
 		{
 			"prop11": {
-				"prop22": "cba"
+				"prop12": "cba"
 			},
-			"prop12": 0
+			"prop21": 0
 		},
 		{
 			"prop11": {
-				"prop22": "abc"
+				"prop12": "abc"
 			},
-			"prop12": 1
+			"prop21": 1
 		},
 		{
 			"prop11": {
-				"prop22": "cba"
+				"prop12": "cba"
 			},
-			"prop12": 2
+			"prop21": 2
 		},
 		{
 			"prop11": {
-				"prop22": "abc"
+				"prop12": "abc"
 			},
-			"prop12": 3
+			"prop21": 3
 		},
 		{
 			"prop11": {
-				"prop22": "abc"
+				"prop12": "abc"
 			},
-			"prop12": 4
+			"prop21": 4
 		}
 	]
 }
@@ -4373,33 +4373,33 @@ all Mavos</button>
 {
 	"deepGroup": [
 		{
-			"prop12": 0,
+			"prop21": 0,
 			"newProp": {
-				"prop22": "cba"
+				"prop12": "cba"
 			}
 		},
 		{
-			"prop12": 1,
+			"prop21": 1,
 			"newProp": {
-				"prop22": "abc"
+				"prop12": "abc"
 			}
 		},
 		{
-			"prop12": 2,
+			"prop21": 2,
 			"newProp": {
-				"prop22": "cba"
+				"prop12": "cba"
 			}
 		},
 		{
-			"prop12": 3,
+			"prop21": 3,
 			"newProp": {
-				"prop22": "abc"
+				"prop12": "abc"
 			}
 		},
 		{
-			"prop12": 4,
+			"prop21": 4,
 			"newProp": {
-				"prop22": "abc"
+				"prop12": "abc"
 			}
 		}
 	]
@@ -4412,8 +4412,8 @@ all Mavos</button>
 				<ul>
 					<b class="mv-group-heading"></b>
 					<li property="deepGroup" mv-multiple mv-groupby="+newProp">
-						<div property="prop12"></div>
-						<div property="newProp" mv-alias="prop11" mv-path="prop22"></div>
+						<div property="prop21"></div>
+						<div property="newProp" mv-alias="prop11" mv-path="prop12"></div>
 					</li>
 				</ul>
 			</td>
@@ -4440,6 +4440,142 @@ all Mavos</button>
 					<li>
 						<div>2</div>
 						<div>cba</div>
+					</li>
+				</ul>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<pre id="collection35">
+{
+	"deepGroup": [
+		{
+			"prop22": 0,
+			"prop11": {
+				"prop12": "cba"
+			}
+		},
+		{
+			"prop22": 1,
+			"prop11": {
+				"prop12": "abc"
+			}
+		},
+		{
+			"prop22": 2,
+			"prop11": {
+				"prop12": "cba"
+			}
+		},
+		{
+			"prop22": 3,
+			"prop11": {
+				"prop12": "abc"
+			}
+		},
+		{
+			"prop22": 4,
+			"prop11": {
+				"prop12": "abc"
+			}
+		}
+	]
+}
+				</pre>
+			</td>
+			<td>
+{
+	"deepGroup": [
+		{
+			"prop22": 0,
+			"prop11": {
+				"prop12": "abc"
+			}
+		},
+		{
+			"prop22": 1,
+			"prop11": {
+				"prop12": "cba"
+			}
+		},
+		{
+			"prop22": 2,
+			"prop11": {
+				"prop12": "abc"
+			}
+		},
+		{
+			"prop22": 3,
+			"prop11": {
+				"prop12": "cba"
+			}
+		},
+		{
+			"prop22": 4,
+			"prop11": {
+				"prop12": "cba"
+			}
+		}
+	]
+}
+			</td>
+		</tr>
+		<tr title="Resort on mv-change">
+			<td id="test34" mv-app mv-storage="#collection35">
+				<input id="c34cb" type="checkbox">
+				<ul>
+					<b class="mv-group-heading"></b>
+					<li property="deepGroup" mv-multiple mv-groupby="-prop12">
+						<div property="prop11">
+							<div property="prop12" class="propVal"></div>
+						</div>
+						<div property="prop22"></div>
+					</li>
+				</ul>
+			</td>
+			<script>
+				$("#c34cb").addEventListener("click", function(e) {
+					$$("#test34 .propVal").forEach(function(elem) {
+						var val = elem.innerHTML;
+						var node = Mavo.Node.get(elem);
+						node.value = val.split("").reverse().join("");
+					});
+				});
+			</script>
+			<td>
+				<input type="checkbox">
+				<ul>
+					<b>cba</b>
+					<li>
+						<div>
+							<div>cba</div>
+						</div>
+						<div>1</div>
+					</li>
+					<li>
+						<div>
+							<div>cba</div>
+						</div>
+						<div>3</div>
+					</li>
+					<li>
+						<div>
+							<div>cba</div>
+						</div>
+						<div>4</div>
+					</li>
+					<b>abc</b>
+					<li>
+						<div>
+							<div>abc</div>
+						</div>
+						<div>0</div>
+					</li>
+					<li>
+						<div>
+							<div>abc</div>
+						</div>
+						<div>2</div>
 					</li>
 				</ul>
 			</td>
